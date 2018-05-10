@@ -60,9 +60,8 @@ LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param,
 
 	switch (u_msg)
 	{
+	// Create window
 	case WM_CREATE:
-		
-		// Create window
 		SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, NULL);
 		style  =  GetWindowLong(hwnd, GWL_STYLE);
 		style &= ~WS_MAXIMIZEBOX;
@@ -85,6 +84,7 @@ LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param,
 		this->CreateButton(TEXT("Refresh"), hwnd, this->m_hinstance);
 		hwnd_address_bar = this->CreateEditBox(bstr, hwnd, this->m_hinstance);
 		return 0;
+	// Add function to btn refresh
 	case WM_COMMAND:
 		switch (LOWORD(w_param))
 		{
@@ -93,6 +93,13 @@ LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param,
 			return 0;
 		}
 		return 0;
+	// Prevent move wnd
+	case WM_SYSCOMMAND:
+		status = (INT)w_param & 0xfff0;
+		if (status == SC_MOVE)
+			return 0;
+		else if (status == SC_CLOSE)
+			return DefWindowProc(hwnd, u_msg, w_param, l_param);
 	case WM_CLOSE:
 		if (WARNING_BOX("You really want to close browser?") == IDNO)
 			return 0;
