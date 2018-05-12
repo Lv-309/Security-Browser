@@ -35,23 +35,15 @@ public:
 		if (!(i % 2))
 		{
 			if (mode == Standard)
-			{
 				ofile.write("Default\t", sizeof("Default\t"));
-				ofile.write(msg, sizeof(msg));
-				ofile.write("\t", sizeof("\t"));
-			}
 			else if (mode == Error)
-			{
 				ofile.write("Error\t\t", sizeof("Error\t\t"));
-				ofile.write(msg, sizeof(msg));
-				ofile.write("\t", sizeof("\t"));
-			}
 			else if (mode == Warning)
-			{
 				ofile.write("Warning\t", sizeof("Warning\t"));
-				ofile.write(msg, sizeof(msg));
-				ofile.write("\t", sizeof("\t"));
-			}
+			
+			ofile.write(msg, sizeof(msg));
+			ofile.write("\t", sizeof("\t"));
+			
 			std::time_t result = std::time(nullptr);
 			ofile.write("Date: ", sizeof("Date: "));
 			ofile.write(std::asctime(std::localtime(&result)), 25);
