@@ -8,8 +8,8 @@ MyWebBrowser::MyWebBrowser(LPCTSTR lpsz_caption, LPWNDCLASSEX lpwn_class_ex)
 		: MyWindow(lpsz_caption, lpwn_class_ex)
 { }
 
-MyWebBrowser::MyWebBrowser(LPCTSTR lpsz_caption, HINSTANCE h_instance, LPCTSTR lpsz_class_name)
-		: MyWindow(lpsz_caption, h_instance, lpsz_class_name)
+MyWebBrowser::MyWebBrowser(LPCTSTR lpsz_caption, HINSTANCE h_instance, LPCTSTR lpsz_class_name, LPWSTR lpwstr_startPage)
+		: MyWindow(lpsz_caption, h_instance, lpsz_class_name), m_lpwstr_startPage(lpwstr_startPage)
 { }
 
 MyWebBrowser::~MyWebBrowser()
@@ -74,7 +74,7 @@ LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param,
 		GetClientRect(hwnd, &rc_client);
 		m_lpwb_wnd = new WebBrowserWindow(hwnd);
 
-		m_lpwb_wnd->Navigate(*static_cast<std::wstring*>(MyWindow::m_wparam));
+		m_lpwb_wnd->Navigate(m_lpwstr_startPage);
 
 		RECT rc;
 		rc.left = 0;

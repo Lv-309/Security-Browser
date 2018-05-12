@@ -14,7 +14,7 @@ namespace ISXMyWebBrowser
 	// Ctors definition
 	public:
 		explicit MyWebBrowser(LPCTSTR lpsz_caption, LPWNDCLASSEX lpwn_class_ex);
-		explicit MyWebBrowser(LPCTSTR lpsz_caption, HINSTANCE h_instance, LPCTSTR lpsz_class_name);
+		explicit MyWebBrowser(LPCTSTR lpsz_caption, HINSTANCE h_instance, LPCTSTR lpsz_class_name, LPWSTR lpwstr_url);
 	#ifdef _INIT_CUSTOM_WND
 		explicit MyWebBrowser(LPCTSTR lpsz_caption, HINSTANCE h_instance, LPCTSTR lpsz_class_name,
 				UINT style, HICON h_icon, HCURSOR h_cursor, HBRUSH hbr_background,
@@ -33,6 +33,7 @@ namespace ISXMyWebBrowser
 		MyWebBrowser& operator=(const MyWebBrowser&) = delete;
 	// Getting as aggregated WebBrowserWindow class
 	private:
+		LPWSTR m_lpwstr_startPage;
 		WebBrowserWindow* m_lpwb_wnd;
 	};
 }

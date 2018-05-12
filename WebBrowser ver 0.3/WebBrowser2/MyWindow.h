@@ -29,8 +29,6 @@ namespace ISXMyWindow
 	// Creating window controls
 	public:
 		virtual VOID SetCaption(LPCTSTR lpsz_caption);
-		virtual void Setwparam(LPVOID param);
-		virtual LPVOID Getwparam() const;
 		virtual BOOL Show()				  const;
 		virtual BOOL Show(INT n_cmd_show) const;
 
@@ -54,7 +52,6 @@ namespace ISXMyWindow
 		HINSTANCE	m_hinstance			= NULL;
 		LPTSTR		m_lpclass_name		= NULL;
 		LPTSTR		m_lpcaption			= NULL;
-		LPVOID		m_wparam			= NULL;
 		LPVOID		m_lparam			= NULL;
 		WNDPROC		m_wndproc_default	= NULL;
 	};

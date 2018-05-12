@@ -94,16 +94,6 @@ VOID MyWindow::SetClassName(LPCTSTR lpsz_class_name)
 	this->m_lpclass_name =  (LPTSTR)calloc(class_name_len, sizeof(TCHAR));
 	_tcscpy_s(this->m_lpclass_name, class_name_len, lpsz_class_name);
 }
-void MyWindow::Setwparam(LPVOID param)
-{
-	if(param != NULL)
-		this->m_wparam = param;
-	return;
-}
-LPVOID MyWindow::Getwparam() const
-{
-	return this->m_wparam;
-}
 LPCTSTR MyWindow::GetClassName() const
 {
 	if (this->m_lpclass_name == NULL)

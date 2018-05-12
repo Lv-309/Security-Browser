@@ -23,10 +23,13 @@ int APIENTRY _tWinMain(_In_		HINSTANCE h_instance,
 		std::wstring path = std::wstring(wideMatch[4].first, wideMatch[4].second);
 		std::wstring query = std::wstring(wideMatch[5].first, wideMatch[5].second);
 	}
+
 	// Checking for right link 
 	
-	MyWindow* lpc_wnd = new MyWebBrowser(TEXT("WebBrowser"), h_instance, TEXT("WebBrowserWindow"));
-	lpc_wnd->Setwparam(&str_url);
+	MyWindow* lpc_wnd = new MyWebBrowser(TEXT("WebBrowser"),
+										 h_instance,
+										 TEXT("WebBrowserWindow"),
+										 (LPWSTR)str_url.c_str());
 	lpc_wnd->Create();
 	lpc_wnd->Show();
 
