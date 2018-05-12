@@ -1,0 +1,9 @@
+		CREATESTRUCT winStruct;
+		winStruct.lpCreateParams = this->m_wparam;
+		lp_param = &winStruct;
+
+
+		CREATESTRUCT winStruct = *(CREATESTRUCT *)l_param;
+		MyWindow* pWind = (MyWindow*)(winStruct.lpCreateParams);
+		//m_lpwb_wnd->Navigate(*(std::wstring*)(pWind->Getwparam()));
+		m_lpwb_wnd->Navigate(*static_cast<std::wstring*>(pWind->Getwparam()));
