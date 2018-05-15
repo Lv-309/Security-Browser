@@ -1,0 +1,6 @@
+﻿  HandleMonitors.cpp
+  MyWebBrowser.cpp
+c:\users\theha\source\repos\webbrowser2\webbrowser2\mywebbrowser.cpp(67): warning C4101: 'status': unreferenced local variable
+  WinMain.cpp
+  Generating Code...
+  WebBrowser2.vcxproj -> C:\Users\theha\source\repos\WebBrowser2\Debug\WebBrowser2.exe
