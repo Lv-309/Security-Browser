@@ -1,0 +1,16 @@
+#pragma once
+
+namespace ISXErrorTypes
+{
+	enum ErrorTypes
+	{
+		NOMONITORS, 
+		FEWMONITORS, 
+		MONITORMIRRORDRIVER,
+		INCORRECTLINK, 
+		REMOTESESSION, 
+		VIRTUALSESSION, 
+		ISOK,
+		TOTALERROR
+	};
+}
