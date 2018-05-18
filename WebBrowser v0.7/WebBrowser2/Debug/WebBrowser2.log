@@ -1,6 +1,12 @@
-﻿  MyWebBrowser.cpp
-c:\users\theha\source\repos\webbrowser2\webbrowser2\mywebbrowser.cpp(87): warning C4101: 'status': unreferenced local variable
+﻿  stdafx.cpp
+  VerifyLink.cpp
+  HandleMonitors.cpp
+  MyWebBrowser.cpp
+\\fstrain\homes\lv-309.c\oandritc\documents\github\security-browser\webbrowser v0.7\webbrowser2\mywebbrowser.cpp(87): warning C4101: 'status': unreferenced local variable
+  MyWindow.cpp
+  HandleSession.cpp
   WebBrowserWindow.cpp
   WinMain.cpp
   Generating Code...
-  WebBrowser2.vcxproj -> C:\Users\theha\source\repos\WebBrowser2\Debug\WebBrowser2.exe
+  LINK : \\fstrain\Homes\Lv-309.C\oandritc\Documents\GitHub\Security-Browser\WebBrowser v0.7\Debug\WebBrowser2.exe not found or not built by the last incremental link; performing full link
+  WebBrowser2.vcxproj -> \\fstrain\Homes\Lv-309.C\oandritc\Documents\GitHub\Security-Browser\WebBrowser v0.7\Debug\WebBrowser2.exe
