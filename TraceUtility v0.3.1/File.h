@@ -11,7 +11,7 @@
 
 #include "Severity.h"
 
-static int i = 0;
+static int counter_write_to_file = 0;
 
 class File
 {
@@ -21,9 +21,9 @@ public:
 	template <typename T>
 	void WriteToFile(const T& msg, Severity severity_level)
 	{
-		i++;
+		counter_write_to_file++;
 
-		if (!(i % 2))
+		if (!(counter_write_to_file % 2))
 		{
 			ofile.write(msg, sizeof(msg));
 			ofile.write("\n\n", sizeof("\n\n"));
