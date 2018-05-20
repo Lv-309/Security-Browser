@@ -1,0 +1,7 @@
+﻿  Camera.cpp
+  FaceDetector.cpp
+\\fstrain\homes\lv-309.c\vlysaktc\documents\visual studio 2017\projects\camerav1\camerav1\facedetector.cpp(19): warning C4018: '<': signed/unsigned mismatch
+  Frame.cpp
+  Source.cpp
+  Generating Code...
+opencv_world341d.lib(opencv_world341d.dll) : fatal error LNK1112: module machine type 'x64' conflicts with target machine type 'x86'
