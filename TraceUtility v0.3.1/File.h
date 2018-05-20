@@ -10,7 +10,6 @@
 #include <ctime>
 
 #include "Severity.h"
-//enum class Severity { Unspecified, Trace, Debug, Info, Warning, Error, Fatal };
 
 static int i = 0;
 
