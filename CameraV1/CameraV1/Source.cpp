@@ -6,10 +6,10 @@
 int main()
 try
 {
-	IdCreator id;
+	ISXIdCreator::IdCreator id;
 	id.ApproveIdPhoto();
 
-	FaceDetector detector;
+	ISXFaceDetector::FaceDetector detector;
 	detector.Detect();
 
 	return 0;

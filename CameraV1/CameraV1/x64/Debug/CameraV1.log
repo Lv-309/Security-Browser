@@ -1,2 +1,8 @@
-﻿  Source.cpp
-  CameraV1.vcxproj -> C:\Users\Uzver\Documents\GitHub\Security-Browser\CameraV1\x64\Debug\CameraV1.exe
+﻿  escapi.cpp
+  Camera.cpp
+  CameraHandler.cpp
+  FaceDetector.cpp
+  IdCreator.cpp
+  Source.cpp
+  Generating Code...
+  CameraV1.vcxproj -> H:\Visual Studio 2017\Projects\Security-Browser-web-camera-development\CameraV1\x64\Debug\CameraV1.exe

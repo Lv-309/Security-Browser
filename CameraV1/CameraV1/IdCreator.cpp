@@ -2,9 +2,11 @@
 
 #define ENTER 13 //??? "In general macros should not be used."
 
+namespace ISXIdCreator
+{
 void IdCreator::TakeIdPhoto()
 {
-	while (!id_taken)
+	while (!is_id_taken)
 	{
 		m_frame = CaptureFrame();
 		imshow("ID_PHOTO", m_frame.get_frame());
@@ -36,4 +38,5 @@ void IdCreator::ApproveIdPhoto()
 	} while (choice == Answer::NO);
 
 	m_frame.SaveFrameToFile("..\\Photos\\ID.jpg");
+}
 }

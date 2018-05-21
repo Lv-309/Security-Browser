@@ -4,6 +4,8 @@
 
 using namespace std;
 
+namespace ISXFaceDetector
+{
 FaceDetector::FaceDetector()
 {
 	m_detector.load(CASCADE_FILE);
@@ -75,4 +77,5 @@ void FaceDetector::DrawRectAroundFaces(std::vector<cv::Rect> faces)
 
 		cv::rectangle(m_frame.get_frame(), pt1, pt2, cvScalar(0, 255, 0, 0), 1, 8, 0);
 	}
+}
 }

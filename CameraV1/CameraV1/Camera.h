@@ -1,24 +1,24 @@
 #pragma once
 
-#include<opencv2\highgui.hpp>
 #include<iostream>
+
+#include<opencv2\highgui.hpp>
 
 #include"Frame.h"
 
+namespace ISXCamera
+{
 class Camera
 {
 protected:
 	Camera();
 	~Camera() {};
 
-	// camera
 	int ChooseCamera();
-	//void TakeIdPhoto();
-	Frame CaptureFrame();
-
+	ISXFrame::Frame CaptureFrame();
 
 private:
 	cv::VideoCapture camera;
-	Frame frame;
-
+	ISXFrame::Frame frame;
 };
+}

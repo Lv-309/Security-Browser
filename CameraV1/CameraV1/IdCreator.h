@@ -2,7 +2,9 @@
 
 #include"Camera.h"
 
-class IdCreator : protected Camera
+namespace ISXIdCreator
+{
+class IdCreator : protected ISXCamera::Camera
 {
 public:
 	IdCreator() {};
@@ -12,12 +14,12 @@ public:
 	void ApproveIdPhoto();
 
 private:
-	Frame m_frame;
-	bool id_taken = false; // m_id_taken???
+	ISXFrame::Frame m_frame;
+	bool is_id_taken = false; // m_id_taken???
 
 	enum Answer
 	{
 		NO, YES
 	};
 };
-
+}

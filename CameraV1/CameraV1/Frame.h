@@ -3,6 +3,8 @@
 #include<opencv2\highgui.hpp>
 #include<opencv2\imgproc.hpp>
 
+namespace ISXFrame
+{
 class Frame
 {
 public:
@@ -17,4 +19,4 @@ public:
 private:
 	cv::Mat m_frame;
 };
-
+}
