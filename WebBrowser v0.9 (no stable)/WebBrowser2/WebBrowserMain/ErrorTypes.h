@@ -1,0 +1,14 @@
+#pragma once
+
+enum class ErrorTypes : unsigned short int
+{
+	NO_MONITORS,
+	FEW_MONITORS,
+	MONITOR_MIRROR_DRIVER,
+	INCORRECT_LINK,
+	REMOTE_SESSION,
+	VIRTUAL_SESSION,
+	IS_OK,
+	TOTAL_ERROR
+};
+

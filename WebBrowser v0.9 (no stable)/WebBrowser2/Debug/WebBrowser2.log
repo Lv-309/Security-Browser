@@ -1,0 +1,9 @@
+﻿  HandleMonitors.cpp
+  MyWebBrowser.cpp
+  WinMain.cpp
+  Generating Code...
+MyWebBrowser.obj : error LNK2005: "class ISXLog::Log tlf_i" (?tlf_i@@3VLog@ISXLog@@A) already defined in HandleMonitors.obj
+MyWebBrowser.obj : error LNK2005: "class ISXLog::Log tlf_f" (?tlf_f@@3VLog@ISXLog@@A) already defined in HandleMonitors.obj
+WinMain.obj : error LNK2005: "class ISXLog::Log tlf_i" (?tlf_i@@3VLog@ISXLog@@A) already defined in HandleMonitors.obj
+WinMain.obj : error LNK2005: "class ISXLog::Log tlf_f" (?tlf_f@@3VLog@ISXLog@@A) already defined in HandleMonitors.obj
+C:\Users\theha\source\repos\WebBrowser2\Debug\WebBrowser2.exe : fatal error LNK1169: one or more multiply defined symbols found

@@ -1,9 +1,0 @@
-﻿  MyWebBrowser.cpp
-c:\users\theha\source\repos\webbrowser2\webbrowser2\mywebbrowser.cpp(122): warning C4244: 'argument': conversion from 'double' to 'INT', possible loss of data
-c:\users\theha\source\repos\webbrowser2\webbrowser2\mywebbrowser.cpp(121): warning C4244: 'argument': conversion from 'double' to 'INT', possible loss of data
-c:\users\theha\source\repos\webbrowser2\webbrowser2\mywebbrowser.cpp(124): warning C4244: 'argument': conversion from 'double' to 'INT', possible loss of data
-c:\users\theha\source\repos\webbrowser2\webbrowser2\mywebbrowser.cpp(123): warning C4244: 'argument': conversion from 'double' to 'INT', possible loss of data
-c:\users\theha\source\repos\webbrowser2\webbrowser2\mywebbrowser.cpp(126): warning C4244: 'argument': conversion from 'double' to 'INT', possible loss of data
-c:\users\theha\source\repos\webbrowser2\webbrowser2\mywebbrowser.cpp(125): warning C4244: 'argument': conversion from 'double' to 'INT', possible loss of data
-c:\users\theha\source\repos\webbrowser2\webbrowser2\mywebbrowser.cpp(131): warning C4101: 'status': unreferenced local variable
-  WebBrowser2.vcxproj -> C:\Users\theha\source\repos\WebBrowser2\Debug\WebBrowser2.exe
