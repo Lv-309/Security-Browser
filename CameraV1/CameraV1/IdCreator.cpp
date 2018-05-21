@@ -1,13 +1,13 @@
 #include "IdCreator.h"
 
-#define ENTER 13
+#define ENTER 13 //??? "In general macros should not be used."
 
 void IdCreator::TakeIdPhoto()
 {
 	while (!id_taken)
 	{
-		frame = CaptureFrame();
-		imshow("ID_PHOTO", frame.GetFrame());
+		m_frame = CaptureFrame();
+		imshow("ID_PHOTO", m_frame.get_frame());
 
 		if (cv::waitKey(30) == ENTER)
 			break;
@@ -24,16 +24,16 @@ void IdCreator::ApproveIdPhoto()
 	{
 		TakeIdPhoto();
 
-		cv::imshow("YOUR_ID_PHOTO", frame.GetFrame());
-		cv::waitKey(1);		
+		cv::imshow("YOUR_ID_PHOTO", m_frame.get_frame());
+		cv::waitKey(1);
 
 		std::cout << "Do you like it? :P\n";
 		std::cout << "0 - no, 1 - yes\n";
 		std::cin >> choice;
-	
+
 		cvDestroyWindow("YOUR_ID_PHOTO");
 
 	} while (choice == Answer::NO);
 
-	frame.SaveFrameToFile("..\\Photos\\ID.jpg");
+	m_frame.SaveFrameToFile("..\\Photos\\ID.jpg");
 }

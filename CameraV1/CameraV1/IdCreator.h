@@ -9,13 +9,11 @@ public:
 	~IdCreator() {};
 
 	void TakeIdPhoto();
-
 	void ApproveIdPhoto();
 
 private:
-	Frame frame;
-	bool id_taken = false;
-	//bool id_approved = false;
+	Frame m_frame;
+	bool id_taken = false; // m_id_taken???
 
 	enum Answer
 	{

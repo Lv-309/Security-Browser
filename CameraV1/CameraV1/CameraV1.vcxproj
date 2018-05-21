@@ -134,7 +134,6 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraHandler.cpp" />
     <ClCompile Include="FaceDetector.cpp" />
-    <ClCompile Include="Frame.cpp" />
     <ClCompile Include="IdCreator.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>

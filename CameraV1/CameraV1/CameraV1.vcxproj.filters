@@ -30,9 +30,6 @@
     <ClCompile Include="FaceDetector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Frame.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="IdCreator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

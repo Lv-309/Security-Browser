@@ -3,7 +3,6 @@
 #include "FaceDetector.h"
 #include "IdCreator.h"
 
-
 int main()
 try
 {
@@ -17,7 +16,7 @@ try
 }
 catch (const char* message)
 {
-	std::cerr << "Error: " << message;
+	std::cerr << "Error: " << message << std::endl;
 	system("pause");
 	return 1;
 }

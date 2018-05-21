@@ -9,11 +9,12 @@ public:
 	Frame() {};
 	~Frame() {};
 
-	cv::Mat& GetFrame();
-	void SaveFrameToFile(std::string saving_path_and_name);
-	void ShowFrame();
+	void SaveFrameToFile(std::string saving_path_and_name) { cv::imwrite(saving_path_and_name, m_frame); }
+	void ShowFrame() { cv::imshow("Output", m_frame); }
+
+	cv::Mat& get_frame() { return m_frame; }
 
 private:
-	cv::Mat frame;
+	cv::Mat m_frame;
 };
 

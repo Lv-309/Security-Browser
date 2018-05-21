@@ -49,7 +49,7 @@ int Camera::ChooseCamera()
 
 Frame Camera::CaptureFrame()
 {
-	camera.read(frame.GetFrame());
+	camera.read(frame.get_frame());
 	return frame;
 }
 
