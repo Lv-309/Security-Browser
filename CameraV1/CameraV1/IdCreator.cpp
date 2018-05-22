@@ -24,16 +24,13 @@ void IdCreator::ApproveIdPhoto()
 	{
 		TakeIdPhoto();
 
-		cv::waitKey(1);
-
 		std::cout << "Do you like it? :P\n";
 		std::cout << "0 - no, 1 - yes\n";
 		std::cin >> choice;
 
-		cvDestroyWindow("ID_PHOTO");
-
 	} while (choice == Answer::NO);
 
+	cvDestroyWindow("ID_PHOTO");
 	m_frame.SaveFrameToFile("..\\Photos\\ID.jpg");
 }
 }
