@@ -42,6 +42,7 @@ void FaceDetector::Detect()
 		}*/
 
 	}
+	cvDestroyWindow("Output");
 }
 
 void FaceDetector::Check(const vector<cv::Rect>& faces)

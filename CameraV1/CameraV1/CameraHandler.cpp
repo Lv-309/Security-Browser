@@ -1,6 +1,6 @@
 #include "CameraHandler.h"
 
-#define MAX_SIZE_OF_NAME 50
+//#define MAX_SIZE_OF_NAME 50
 
 namespace ISXCameraHandler
 {
@@ -32,7 +32,9 @@ std::vector<std::string> CameraHandler::GetNamesOfAvailableCameras()
 
 bool CameraHandler::IsAnyCameraAvailable()
 {
-	if (GetNumOfAvailableCameras() <= 0) return false;
-	else return true;
+	if (GetNumOfAvailableCameras() <= 0) 
+		return false;
+	else 
+		return true;
 }
 }

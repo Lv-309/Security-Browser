@@ -20,5 +20,7 @@ protected:
 private:
 	cv::VideoCapture camera;
 	ISXFrame::Frame frame;
+	static int chosen_camera;
+	static bool camera_is_chosen;
 };
 }

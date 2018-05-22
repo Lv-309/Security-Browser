@@ -14,8 +14,6 @@ void IdCreator::TakeIdPhoto()
 		if (cv::waitKey(30) == ENTER)
 			break;
 	}
-
-	cvDestroyWindow("ID_PHOTO");
 }
 
 void IdCreator::ApproveIdPhoto()
@@ -26,14 +24,13 @@ void IdCreator::ApproveIdPhoto()
 	{
 		TakeIdPhoto();
 
-		cv::imshow("YOUR_ID_PHOTO", m_frame.get_frame());
 		cv::waitKey(1);
 
 		std::cout << "Do you like it? :P\n";
 		std::cout << "0 - no, 1 - yes\n";
 		std::cin >> choice;
 
-		cvDestroyWindow("YOUR_ID_PHOTO");
+		cvDestroyWindow("ID_PHOTO");
 
 	} while (choice == Answer::NO);
 

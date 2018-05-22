@@ -6,22 +6,35 @@
 
 namespace ISXCamera
 {
+	bool Camera::camera_is_chosen = false;
+	int Camera::chosen_camera = {};
+
 Camera::Camera()
 {
-	camera.open(ChooseCamera());
-
-	if (!camera.isOpened())
+	if (!camera_is_chosen)
 	{
-		std::cout << "can't find any camera " << std::endl;
-		system("pause");
-		return;
+		chosen_camera = ChooseCamera();
+		camera.open(chosen_camera);
+
+		if (!camera.isOpened())
+		{
+			std::cout << "can't find any camera " << std::endl;
+			system("pause");
+			return;
+		}
+
+		camera_is_chosen = true;
+	}
+	else
+	{
+		camera.open(chosen_camera);
 	}
 }
 
 int Camera::ChooseCamera()
 {
-	std::vector<std::string> cameras_names;
 	int quantity_of_cameras = 0;
+	std::vector<std::string> cameras_names;
 	ISXCameraHandler::CameraHandler camera_handler;
 
 	cameras_names = camera_handler.GetNamesOfAvailableCameras();
