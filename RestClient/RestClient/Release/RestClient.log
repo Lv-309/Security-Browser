@@ -1,0 +1,10 @@
+﻿  Base64.cpp
+Base64.cpp(70): warning C4267: '=': conversion from 'size_t' to 'unsigned char', possible loss of data
+Base64.cpp(84): warning C4267: '=': conversion from 'size_t' to 'unsigned char', possible loss of data
+  HttpClient.cpp
+  main.cpp
+  Generating code
+  All 9377 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  RestClient.vcxproj -> E:\SoftServeCourse\Rest_Client\RestClient\Release\RestClient.exe
+  RestClient.vcxproj -> E:\SoftServeCourse\Rest_Client\RestClient\Release\RestClient.pdb (Full PDB)
