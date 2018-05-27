@@ -1,12 +1,18 @@
 #include "HttpClient.h"
-#include "Base64.h" // for image encoding
+#include "Base64.h" // for image decoding
 
 namespace HttpClient {
 
 
-	HttpClient::HttpClient() : base_url(L"http://192.168.195.180"), client(base_url)
+	HttpClient::HttpClient() : base_url(L"http://192.168.195.180"), client(base_url), 
+		user_name(L""), user_password(L"")
 	{
-	}	
+	}
+
+	HttpClient::HttpClient(utility::string_t user_name, utility::string_t user_password) : user_name(user_name), user_password(user_password),
+		base_url(L"http://192.168.195.180"), client(base_url)
+	{
+	}
 
 	HttpClient::HttpClient(HttpClient&& rhs) : base_url(rhs.base_url), client(rhs.client)
 	{
@@ -63,10 +69,10 @@ namespace HttpClient {
 		return requestTask;
 	}
 
-	pplx::task<void> HttpClient::core_auth_request_password_reset()
+	pplx::task<void> HttpClient::core_auth_request_password_reset( )
 	{	
 		//moodlewsrestformat=json
-		std::wstring str = L"/webservice/rest/server.php?&wstoken=859b2244c55636be03408c2b0e208b03&wsfunction=core_auth_request_password_reset&username=ws_access&email=taras.serhii@gmail.com";
+		std::wstring str = L"/webservice/rest/server.php?moodlewsrestformat=json&wstoken=859b2244c55636be03408c2b0e208b03&wsfunction=core_auth_request_password_reset&username=ws_access&email=taras.serhii@gmail.com";
 					
 			return client.request(
 				methods::GET, str).then([](http_response response)
@@ -90,17 +96,12 @@ namespace HttpClient {
 			});
 	}
 
-	pplx::task<void> HttpClient::request_files_upload(char* buffer, size_t lenght) 
+	pplx::task<void> HttpClient::request_files_upload(utility::string_t& fragment_path, char* buffer, size_t lenght, std::shared_ptr<streams::ostream>& out_stream) 
 	{	
 		//std::string encoded_str = base64_encode(reinterpret_cast<const unsigned char*>(buffer), lenght);
 		//std::wstring wstr_encoded(encoded_str.begin(), encoded_str.end());
 
-		// moodlewsrestformat=json
-		std::wstring fragment_path = L"/webservice/rest/server.php?&wstoken=859b2244c55636be03408c2b0e208b03&wsfunction=core_files_upload&component=user&filearea=draft&itemid=1&filepath=/&filename=image.jpg&filecontent=&contextlevel=course&instanceid=1";
-
 		std::wstring body(&buffer[0],&buffer[lenght-1]);
-
-		std::wcout << body << std::endl;
 
 		return client.request(methods::POST,
 			                  fragment_path,
@@ -125,4 +126,5 @@ namespace HttpClient {
 			});
 		});
 	}
+
 }

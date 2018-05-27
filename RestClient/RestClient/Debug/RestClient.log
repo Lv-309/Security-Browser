@@ -1,5 +1,4 @@
-﻿  main.cpp
-  HttpClient.cpp
+﻿  HttpClient.cpp
+  main.cpp
   Generating Code...
-  RestClient.vcxproj -> E:\SoftServeCourse\Rest_Client\RestClient\Debug\RestClient.exe
-  RestClient.vcxproj -> E:\SoftServeCourse\Rest_Client\RestClient\Debug\RestClient.pdb (Partial PDB)
+  RestClient.vcxproj -> E:\SoftServeCourse\Tasks\RestClient\RestClient\Debug\RestClient.exe
