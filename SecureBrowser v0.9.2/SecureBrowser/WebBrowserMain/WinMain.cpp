@@ -39,12 +39,12 @@ int APIENTRY _tWinMain(_In_		HINSTANCE h_instance,
 	// if all is OK, create window
 	tlf_i << AT << "All stages of the verifying are successfully passed, creating a browser window";
 	lpc_wnd->Create();
-
-
+	
 
 	MSG msg;
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
+		lpc_wnd->UpdateLink();
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}

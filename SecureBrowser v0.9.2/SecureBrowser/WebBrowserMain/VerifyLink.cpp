@@ -43,12 +43,12 @@ ErrorTypes VerifyLink::Verify() const noexcept
 		FAILURE_BOX("Incorrect link no http or https");
 		return ErrorTypes::INCORRECT_LINK;
 	}
-// 	else if (GetDomain().compare(L"softserve.academy") != 0)
-// 	{
-// 		tlf_f << AT << "Incorrect link";
-// 		FAILURE_BOX("Incorrect link");
-// 		return ErrorTypes::INCORRECT_LINK;
-// 	}
+	else if (GetDomain().compare(L"softserve.academy") != 0)
+	{
+		tlf_f << AT << "Incorrect link";
+		FAILURE_BOX("Incorrect link");
+		return ErrorTypes::INCORRECT_LINK;
+	}
 	tlf_i << AT << "Successful input link verification";
 	return ErrorTypes::IS_OK;
 }

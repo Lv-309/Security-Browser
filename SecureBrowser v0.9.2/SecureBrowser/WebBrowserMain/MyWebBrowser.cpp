@@ -11,78 +11,94 @@ using ISXHandleSession::HandleSession;
 using namespace ISXMyWebBrowser;
 
 MyWebBrowser::MyWebBrowser(HINSTANCE h_instance, LPCTSTR lpsz_link)
-		: MyWindow(TEXT("WebBrowser"), h_instance, TEXT("WebBrowserWindow"))
-		, m_handle_monitors()
-		, m_lpsz_link(lpsz_link)
-		, m_cc_wnd(this->m_hinstance)
+	: MyWindow(TEXT("WebBrowser"), h_instance, TEXT("WebBrowserWindow"))
+	, m_handle_monitors()
+	, m_lpsz_link(lpsz_link)
+	, m_cc_wnd(this->m_hinstance)
 { }
 
 MyWebBrowser::~MyWebBrowser()
-{ 
-	if (this->m_hwnd_self != nullptr)
-	{
-		DestroyWindow(this->m_hwnd_self);
-		this->m_hwnd_self = nullptr;
-	}
+{ }
+
+VOID MyWebBrowser::SetFont(const HWND label_handle) const noexcept
+{
+	const short FONT_SIZE = 13;
+	LPCTSTR font_name = TEXT("Verdana");
+	HDC hdc = GetDC(label_handle);
+	LOGFONT log_font = { 0 };
+
+	log_font.lfHeight = -MulDiv(FONT_SIZE, GetDeviceCaps(hdc, LOGPIXELSY), 72);
+	log_font.lfWeight = FW_MEDIUM;
+	_tcscpy_s(log_font.lfFaceName, font_name);
+
+	HFONT h_font = CreateFontIndirect(&log_font);
+	ReleaseDC(label_handle, hdc);
+	SendMessage(label_handle, WM_SETFONT, (WPARAM)h_font, (LPARAM)MAKELONG(TRUE, 0));
 }
 
 HWND MyWebBrowser::CreateLabel(LPCTSTR lpsz_text, const RECT& rc, HWND hwnd) const noexcept
 {
-	return CreateWindow(TEXT("STATIC"), lpsz_text, WS_CHILD | WS_VISIBLE | WS_TABSTOP,
-		rc.left, rc.top, rc.right, rc.bottom, 
-		hwnd, (HMENU)WndControls::ID_LOGO, this->m_hinstance, NULL);
+	return CreateWindow(
+		TEXT("STATIC"),
+		lpsz_text,
+		WS_CHILD | WS_VISIBLE | WS_TABSTOP,
+		rc.left, rc.top, rc.right, rc.bottom,
+		hwnd,
+		(HMENU)WndControls::ID_LOGO,
+		this->m_hinstance,
+		NULL
+	);
 }
 
-HWND MyWebBrowser::CreateButton(LPCTSTR lpsz_name, HWND hwnd) const noexcept
+HWND MyWebBrowser::CreateButton(LPCTSTR lpsz_name, const RECT& rc, HWND hwnd) const noexcept
 {
-	RECT rc = { 10, 8, 80, 30 };
 	return this->CreateButton(
-			lpsz_name,
-			hwnd,
-			rc,
-			(HMENU)WndControls::ID_GO_BTN
-		);
+		lpsz_name,
+		hwnd,
+		rc,
+		(HMENU)WndControls::ID_GO_BTN
+	);
 }
 
 HWND MyWebBrowser::CreateButton(LPCTSTR lpsz_name, HWND hwnd, const RECT& rc, HMENU menu) const noexcept
 {
 	return CreateWindowEx(
-			0,
-			TEXT("BUTTON"),
-			lpsz_name,
-			WS_CHILD | WS_VISIBLE,
-			(INT)rc.left,  (INT)rc.top,
-			(INT)rc.right, (INT)rc.bottom,
-			hwnd,
-			menu,
-			this->m_hinstance,
-			NULL
-		);
+		0,
+		TEXT("BUTTON"),
+		lpsz_name,
+		WS_CHILD | WS_VISIBLE,
+		(INT)rc.left, (INT)rc.top,
+		(INT)rc.right, (INT)rc.bottom,
+		hwnd,
+		menu,
+		this->m_hinstance,
+		NULL
+	);
 }
 
 HWND MyWebBrowser::CreateEditBox(LPCTSTR lpsz_lnk, const RECT& rc, HWND hwnd) const noexcept
 {
 	return CreateWindowEx(
-			0, 
-			TEXT("EDIT"),
-			lpsz_lnk,
-			WS_CHILD | WS_VISIBLE | WS_BORDER,
-			(INT)rc.left, (INT)rc.top,
-			(INT)rc.right, (INT)rc.bottom,
-			hwnd, 
-			NULL, 
-			this->m_hinstance,
-			NULL
-		);
+		0,
+		TEXT("EDIT"),
+		lpsz_lnk,
+		WS_CHILD | WS_VISIBLE | WS_BORDER,
+		(INT)rc.left, (INT)rc.top,
+		(INT)rc.right, (INT)rc.bottom,
+		hwnd,
+		NULL,
+		this->m_hinstance,
+		NULL
+	);
 }
 
-// VOID MyWebBrowser::UpdateLink() const
-// {
-// 	BSTR bstr;
-// 	this->m_lpwb_wnd->GetURL(&bstr);
-// 	SetWindowText(this->m_hwnd_address_bar, bstr);
-// 	SysFreeString(bstr);
-// }
+VOID MyWebBrowser::UpdateLink() const
+{
+	BSTR bstr;
+	this->m_lpwb_wnd->GetURL(&bstr);
+	SetWindowText(this->m_hwnd_address_bar, bstr);
+	SysFreeString(bstr);
+}
 
 ErrorTypes MyWebBrowser::Verify() const noexcept
 {
@@ -91,7 +107,6 @@ ErrorTypes MyWebBrowser::Verify() const noexcept
 	return ErrorTypes::IS_OK;
 }
 
-// Factory
 MyWebBrowser* MyWebBrowser::CreateSafe(HINSTANCE h_instance, LPCTSTR lpsz_link)
 {
 	// Verify link on validity
@@ -100,8 +115,8 @@ MyWebBrowser* MyWebBrowser::CreateSafe(HINSTANCE h_instance, LPCTSTR lpsz_link)
 		return nullptr;
 	// Verify session on remote or virtual access
 	HandleSession	handle_session;
-//	if (handle_session.Verify() != ErrorTypes::IS_OK)
-//		return nullptr;
+	//	if (handle_session.Verify() != ErrorTypes::IS_OK)
+	//		return nullptr;
 	// If is ok, return object
 	return new MyWebBrowser(h_instance, lpsz_link);
 }
@@ -145,11 +160,10 @@ ErrorTypes MyWebBrowser::TestPassing(HWND hwnd, const RECT& rc_client) noexcept
 
 LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LPARAM l_param)
 {
-	RECT		rc_client, rc_edit, rc_logo = { 10, 15, 120, 20 };
+	RECT		rc_client;
+	RECT		rc_logo = { 10, 13, 200, 20 }, rc_edit, rc_go;
 	LONG		style;
 	DWORD		label_id;
-
-	this->m_hwnd_self = hwnd;
 
 	switch (u_msg)
 	{
@@ -157,7 +171,7 @@ LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LP
 	case WM_CREATE:
 		// Set window params
 		SetWindowPos(hwnd, HWND_TOP, 0, 0, 0, 0, NULL);
-		style  =  GetWindowLong(hwnd, GWL_STYLE);
+		style = GetWindowLong(hwnd, GWL_STYLE);
 		style &= ~WS_MAXIMIZEBOX;
 		style &= ~WS_MINIMIZEBOX;
 		style &= ~WS_THICKFRAME;
@@ -165,16 +179,19 @@ LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LP
 		ShowWindow(hwnd, SHOW_FULLSCREEN);
 
 		GetClientRect(hwnd, &rc_client);
-		// Create controls and disable editbox
-		this->CreateLabel(TEXT("Secure Browser"), rc_logo, hwnd);
-		//this->CreateButton(TEXT("Go"), hwnd);
-		// Edit
-		rc_edit = { 150, 12, rc_client.right - 250, 25 };
+	// Create controls
+		HWND label_handle;
+		label_handle = this->CreateLabel(TEXT("Secure Browser"), rc_logo, hwnd);
+		this->SetFont(label_handle);
+		rc_go   = { rc_client.right - 80, 12, 50, 25 };
+		this->CreateButton(TEXT("Go"), rc_go, hwnd);
+		rc_edit = { 155, 12, rc_client.right - 250, 25 };
 		this->m_hwnd_address_bar = this->CreateEditBox(TEXT(""), rc_edit, hwnd);
-		EnableWindow(this->m_hwnd_address_bar, FALSE);
+		this->SetFont(this->m_hwnd_address_bar);
+		// EnableWindow(this->m_hwnd_address_bar, FALSE);
 
 		if (this->Authentication(hwnd, rc_client) != ErrorTypes::IS_OK)
-				PostMessage(hwnd, WM_CLOSE, NULL, NULL); // TODO: do right exit
+			PostMessage(hwnd, WM_CLOSE, NULL, NULL); // TODO: do right exit
 
 		this->TestPassing(hwnd, rc_client);
 		return 0;
@@ -183,6 +200,7 @@ LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LP
 		if (label_id == (INT)WndControls::ID_LOGO)
 		{
 			SetBkColor((HDC)w_param, LIGHT_BLUE);
+			SetTextColor((HDC)w_param, RGB(104, 104, 205));
 			return (INT_PTR)CreateSolidBrush(LIGHT_BLUE);
 		}
 		return 0;
@@ -199,10 +217,9 @@ LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LP
 		{
 			EnableWindow(hwnd, TRUE);
 			SetFocus(hwnd);
+			return 0;
 		}
-		else
-			DestroyWindow(hwnd);
-		return 0;
+		return DestroyWindow(hwnd);
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
@@ -210,4 +227,3 @@ LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LP
 		return DefWindowProc(hwnd, u_msg, w_param, l_param);
 	}
 }
-

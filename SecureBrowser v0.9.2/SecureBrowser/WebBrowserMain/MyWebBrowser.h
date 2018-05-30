@@ -37,8 +37,9 @@ namespace ISXMyWebBrowser
 		MyWebBrowser& operator=(const MyWebBrowser& other) = delete;
 	// Functionality
 	public:
-		///VOID UpdateLink() const;
+		VOID UpdateLink() const;
 		ErrorTypes Verify() const noexcept;
+		VOID SetFont(const HWND label_handle) const noexcept;
 		static MyWebBrowser* CreateSafe(HINSTANCE h_instance, LPCTSTR lpsz_link);
 	// Stages
 	private:
@@ -46,17 +47,16 @@ namespace ISXMyWebBrowser
 		ErrorTypes Authentication(HWND hwnd, const RECT& rc_client) noexcept;
 	// Create controls
 	private:
-		HWND CreateLabel(LPCTSTR lpsz_text, const RECT& rc, HWND hwnd) const noexcept;
-		HWND CreateButton(LPCTSTR lpsz_name, HWND hwnd) const noexcept;
+		HWND CreateLabel(LPCTSTR lpsz_text, const RECT& rc, HWND hwnd)  const noexcept;
+		HWND CreateButton(LPCTSTR lpsz_name, const RECT& rc, HWND hwnd) const noexcept;
 		HWND CreateButton(LPCTSTR lpsz_name, HWND hwnd, const RECT& rc, HMENU menu) const noexcept;
 		HWND CreateEditBox(LPCTSTR lpsz_lnk, const RECT& rc, HWND hwnd) const noexcept;
 	// Callback methods
 	protected:
 		LRESULT CALLBACK WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LPARAM l_param) override;
 	// Private fields
-	private:	
-		HWND						m_hwnd_address_bar	= nullptr;
-		HWND						m_hwnd_self			= nullptr;
+	private:
+		HWND						m_hwnd_address_bar = nullptr;
 		LPCTSTR						m_lpsz_link;
 		// Our classes
 		ChooseCameraWindow			m_cc_wnd;
