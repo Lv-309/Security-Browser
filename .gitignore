@@ -4,6 +4,8 @@
 # Compiled Object files
 *.slo
 *.lo
+*.obj
+*.iobj
 
 # Compiled Dynamic libraries
 *.so
@@ -31,7 +33,8 @@
 *_i.h
 *.ilk
 *.meta
-*.iobj
+*.pch
+*.pdb
 *.ipdb
 *.gch
 *.pgc
