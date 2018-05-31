@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include <opencv2\highgui.hpp>
+#include "..\AdditionalDir\opencv2\highgui.hpp"
 #include "Frame.h"
 
 namespace ISXCamera
