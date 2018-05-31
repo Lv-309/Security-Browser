@@ -4,7 +4,7 @@
 #include<vector>
 #include<chrono>
 
-#include"..\AdditionalDir\opencv2\objdetect.hpp"
+#include<opencv2\objdetect.hpp>
 
 #include"Camera.h"
 
