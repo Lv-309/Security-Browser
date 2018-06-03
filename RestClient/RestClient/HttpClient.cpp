@@ -1,9 +1,10 @@
 #include "HttpClient.h"
+#include <vector>
 #include "Base64.h" // for image decoding
+#include "LogInfo.h"
 
-namespace HttpClient {
-
-
+namespace ISXHttpClient 
+{
 	HttpClient::HttpClient() : base_url(L"http://192.168.195.180"), client(base_url), 
 		user_name(L""), user_password(L"")
 	{
@@ -36,40 +37,9 @@ namespace HttpClient {
 		// set rhs in deleted state, nothing (no pointers)
 
 		return *this;
-	}
+	}	
 
-	pplx::task<void> HttpClient::request_get(const uri_builder& query, std::shared_ptr<streams::ostream>& out_stream, const std::wstring& file_name)
-	{
-		std::wstring resault_file(file_name);
-		resault_file += L".html";
-
-		pplx::task<void> requestTask = streams::fstream::open_ostream(resault_file.c_str()).then([=](streams::ostream outFile)
-		{
-			*out_stream = outFile;
-
-			uri_builder builder(query);
-
-			return client.request(methods::GET, builder.to_string());
-		})
-			// Handle response headers arriving.
-			.then([=](http_response response)
-		{
-			std::cout << "Received response status code: " << response.status_code() << std::endl;
-
-			// Write response body into the file.
-			return response.body().read_to_end(out_stream->streambuf());
-		})
-
-			// Close the file stream.
-			.then([=](size_t)
-		{
-			return out_stream->close();
-		});
-
-		return requestTask;
-	}
-
-	pplx::task<void> HttpClient::core_auth_request_password_reset( )
+	pplx::task<void> HttpClient::core_auth_request_password_reset()
 	{	
 		//moodlewsrestformat=json
 		std::wstring str = L"/webservice/rest/server.php?moodlewsrestformat=json&wstoken=859b2244c55636be03408c2b0e208b03&wsfunction=core_auth_request_password_reset&username=ws_access&email=taras.serhii@gmail.com";
@@ -96,20 +66,31 @@ namespace HttpClient {
 			});
 	}
 
-	pplx::task<void> HttpClient::request_files_upload(utility::string_t& fragment_path, char* buffer, size_t lenght, std::shared_ptr<streams::ostream>& out_stream) 
+	pplx::task<void> HttpClient::request_files_upload(char* buffer, size_t lenght)
 	{	
-		//std::string encoded_str = base64_encode(reinterpret_cast<const unsigned char*>(buffer), lenght);
-		//std::wstring wstr_encoded(encoded_str.begin(), encoded_str.end());
+		char buffer_test[] = "test";
+		int lenght_test = 5;
 
-		std::wstring body(&buffer[0],&buffer[lenght-1]);
+		std::string encoded_str = base64_encode(reinterpret_cast<const unsigned char*>(buffer_test), lenght_test);
+		std::wstring wstr_encoded(encoded_str.begin(), encoded_str.end());		
 
-		return client.request(methods::POST,
-			                  fragment_path,
-			                  body).then([](http_response response)
+		std::wstring body = L"/webservice/rest/server.php?&wstoken=859b2244c55636be03408c2b0e208b03&wsfunction=core_files_upload&contextid=0&component=user&filearea=draft&itemid=0&filepath=/&filename=test.txt&filecontent=";
+		
+		body.append(wstr_encoded);
+
+		body.append(L"&contextlevel=user&instanceid=7");				
+		
+		return client.request(methods::POST, body
+			).then([](http_response response)
 		{	
 			std::wostringstream ss;
 			ss << L"Server returned returned status code " << response.status_code() << L'.' << std::endl;
+			
 			std::wcout << ss.str();
+
+			std::string out(ss.str().begin(), ss.str().end());
+
+			tlf_i << AT << out;
 
 			size_t lenght = (size_t)response.headers().content_length();
 
@@ -123,8 +104,12 @@ namespace HttpClient {
 				std::wstring wstr(text.begin(), text.end());
 
 				std::wcout << wstr << std::endl;
+
+				std::string out(wstr.begin(), wstr.end());
+
+				tlf_i << AT << out;
+
 			});
 		});
 	}
-
 }

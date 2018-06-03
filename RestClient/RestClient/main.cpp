@@ -3,7 +3,7 @@
 #include "HttpClient.h"
 
 #include <iostream>
-#include <string>
+#include <cstring>
 
 unsigned long GetSize(std::ifstream &is)
 {
@@ -17,13 +17,12 @@ unsigned long GetSize(std::ifstream &is)
 
 int wmain()
 {
-	
-	//char* buffer = nullptr;
-	//size_t size = 0;
-	//const char file_path[] = "E:\\SoftServeCourse\\Rest_Client\\RestClient\\RestClient\\image.jpeg";
+	char* buffer = nullptr;
+	size_t size = 0;
 
-	//std::ifstream is;
-	//is.open(file_path, std::ios::binary);
+	//const char file_path[] = "text2.txt";
+
+	//std::ifstream is(file_path);	
 
 	//if (!is.is_open())
 	//{
@@ -37,25 +36,11 @@ int wmain()
 
 	//is.read(buffer, size);
 	//is.close();	
-
-	//
-	//HttpClient::HttpClient client;
-
-	//pplx::task<void> requestTask = client.request_files_upload(buffer,size);
-
-	//try
-	//{
-	//	requestTask.wait();
-	//}
-	//catch (const std::exception &e)
-	//{
-	//	std::cout << "Error exception: " << e.what() << std::endl;
-	//}	
 	//
 
-	HttpClient::HttpClient client;
+	ISXHttpClient::HttpClient client;
 
-	pplx::task<void> requestTask = client.core_auth_request_password_reset();
+	pplx::task<void> requestTask = client.request_files_upload(buffer, size);
 
 	try
 	{
@@ -63,14 +48,13 @@ int wmain()
 	}
 	catch (const std::exception &e)
 	{
-		std::cout << "Error exception: " << e.what() << std::endl;
-	}
-	
+		std::wcout << "Error exception: " << e.what() << std::endl;
+	}	
 
 	std::wcout << "Enter any key to continue..." << std::endl;
 	std::cin.get();
 
-	//delete[] buffer;
+	////delete[] buffer;
 
 	return 0;
 }

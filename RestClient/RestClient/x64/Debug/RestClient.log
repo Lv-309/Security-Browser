@@ -1,0 +1,25 @@
+﻿  HttpClient.cpp
+e:\softservecourse\tasks\restclient\restclient\restclient\file.h(2): warning C4005: '_CRT_SECURE_NO_WARNINGS': macro redefinition
+  e:\softservecourse\tasks\restclient\restclient\restclient\file.h(2): note: command-line arguments:  see previous definition of '_CRT_SECURE_NO_WARNINGS'
+e:\softservecourse\tasks\restclient\restclient\restclient\file.h(29): error C2664: 'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::write(const _Elem *,std::streamsize)': cannot convert argument 1 from 'const wchar_t [5]' to 'const char *'
+          with
+          [
+              _Elem=char
+          ]
+  e:\softservecourse\tasks\restclient\restclient\restclient\file.h(29): note: Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+  e:\softservecourse\tasks\restclient\restclient\restclient\log.h(16): note: see reference to function template instantiation 'void File::WriteToFile<wchar_t[5]>(const T (&),Severity)' being compiled
+          with
+          [
+              T=wchar_t [5]
+          ]
+  e:\softservecourse\tasks\restclient\restclient\restclient\httpclient.cpp(90): note: see reference to function template instantiation 'Log &Log::operator <<<wchar_t[5]>(const T (&))' being compiled
+          with
+          [
+              T=wchar_t [5]
+          ]
+e:\softservecourse\tasks\restclient\restclient\restclient\file.h(53): error C2664: 'std::basic_ostream<char,std::char_traits<char>> &std::basic_ostream<char,std::char_traits<char>>::write(const _Elem *,std::streamsize)': cannot convert argument 1 from 'const wchar_t [5]' to 'const char *'
+          with
+          [
+              _Elem=char
+          ]
+  e:\softservecourse\tasks\restclient\restclient\restclient\file.h(53): note: Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast

@@ -11,7 +11,8 @@ using namespace web::http::client;
 using namespace concurrency;
 using namespace concurrency::streams;
 
-namespace HttpClient {	
+namespace ISXHttpClient 
+{	
 
 	class HttpClient
 	{
@@ -23,9 +24,8 @@ namespace HttpClient {
 		~HttpClient();
 
 		HttpClient& operator=(HttpClient&&);
-
-		pplx::task<void> request_get(const uri_builder&, std::shared_ptr<streams::ostream>&, const std::wstring& file_name = L"resaults");
-		pplx::task<void> request_files_upload(utility::string_t&, char*, size_t, std::shared_ptr<streams::ostream>&);
+		
+		pplx::task<void> request_files_upload(char* buffer, size_t lenght);
 		pplx::task<void> core_auth_request_password_reset();
 
 	private:
