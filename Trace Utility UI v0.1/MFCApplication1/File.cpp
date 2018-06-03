@@ -20,15 +20,9 @@ std::vector<std::string> File::ReadFromFile()
 	while (std::getline(ifile, line))
 	{
 		Split(line, '\t', vec);
-		line_counter++;
 	}
 
 	return vec;
-}
-
-int File::GetLineCount()
-{
-	return line_counter;
 }
 
 void File::Split(const std::string &s, char delim, std::vector<std::string> &elems)

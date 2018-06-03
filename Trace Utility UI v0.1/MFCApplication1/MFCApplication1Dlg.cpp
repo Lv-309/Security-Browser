@@ -153,7 +153,7 @@ void CMFCApplication1Dlg::OnCustomdrawMyList(NMHDR* pNMHDR, LRESULT* pResult)
 
 		strText = m_List.GetItemText(current_item++, 0);
 
-		if (current_item == file.GetLineCount())
+		if (current_item == m_List.GetItemCount())
 			current_item = 0;
 
 		if (strText == "[Fatal]")

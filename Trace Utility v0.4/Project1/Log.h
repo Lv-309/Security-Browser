@@ -5,6 +5,8 @@
 
 namespace ISXLog
 {
+	static std::mutex mtx;
+	
 	class Log
 	{
 	public:
@@ -14,14 +16,12 @@ namespace ISXLog
 	protected:
 		File file;
 		Severity severity_level;
-	private:
-		std::mutex mtx;
 	};
 
 	template <typename T>
 	auto& Log::operator<< (const T& msg)
 	{
-		this->mtx.lock();
+		mtx.lock();
 
 		file.OpenFile();
 		file.WriteToFile(msg, severity_level);
