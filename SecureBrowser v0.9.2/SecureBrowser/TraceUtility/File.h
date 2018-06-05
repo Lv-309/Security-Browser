@@ -4,58 +4,64 @@
 #define TOSTRING(x) STRINGIFY(x)
 #define AT __FILE__ ":" TOSTRING(__LINE__)
 
+#include <mutex>
 #include <fstream>
 #include <ctime>
-
 #include "Severity.h"
 
-static int i = 0;
-
-class File
+namespace ISXFile
 {
-public:
-	void OpenFile();
-	void CloseFile();
+	class File
+	{
+	public:
+		void OpenFile();
+		void CloseFile();
+		template <typename T>
+		void WriteToFile(const T& msg, Severity severity_level);
+	private:
+		char* GetCurrentTime();
+		
+		std::ofstream m_ofile;
+		int m_counter_writing_to_file = 0;
+		
+		std::recursive_mutex mutex;
+	};
+
 	template <typename T>
-	void WriteToFile(const T& msg, Severity severity_level);
-private:
-	std::ofstream m_ofile;
-	char* GetCurTime();
-}; 
-
-
-template <typename T>
-void File::WriteToFile(const T& msg, Severity severity_level)
-{
-	i++;
-
-	if (!(i % 2))
+	void File::WriteToFile(const T& msg, Severity severity_level)
 	{
-		this->m_ofile.write(msg, sizeof(msg));
-		this->m_ofile.write("\n\n", sizeof("\n\n"));
-	}
-	else
-	{
-		if (severity_level == Severity::Unspecified)
-			this->m_ofile.write("[Unspecified]\t", sizeof("[Unspecified]\t"));
-		else if (severity_level == Severity::Trace)
-			this->m_ofile.write("[Trace]\t", sizeof("[Trace]\t"));
-		else if (severity_level == Severity::Debug)
-			this->m_ofile.write("[Debug]\t", sizeof("[Debug]\t"));
-		else if (severity_level == Severity::Info)
-			this->m_ofile.write("[Info]\t\t", sizeof("[Info]\t\t"));
-		else if (severity_level == Severity::Warning)
-			this->m_ofile.write("[Warning]\t", sizeof("[Warning]\t"));
-		else if (severity_level == Severity::Error)
-			this->m_ofile.write("[Error]\t", sizeof("[Error]\t"));
-		else if (severity_level == Severity::Fatal)
-			this->m_ofile.write("[Fatal]\t", sizeof("[Fatal]\t"));
+		std::lock_guard<std::recursive_mutex> lock(mutex);
 
-		auto current_time = this->GetCurTime();
-		this->m_ofile.write(current_time, 24);
-		this->m_ofile.write("\t", sizeof("\t"));
+		m_counter_writing_to_file++;
 
-		this->m_ofile.write(msg, sizeof(msg));
-		this->m_ofile.write("\t", sizeof("\t"));
+		if (!(m_counter_writing_to_file % 2))
+		{
+			this->m_ofile.write(msg, sizeof(msg));
+			this->m_ofile.write("\n\n", sizeof(""));
+		}
+		else
+		{
+			if (severity_level == Severity::Unspecified)
+				this->m_ofile.write("[Unspecified]\t", sizeof("[Unspecified]"));
+			else if (severity_level == Severity::Trace)
+				this->m_ofile.write("[Trace]\t", sizeof("[Trace]"));
+			else if (severity_level == Severity::Debug)
+				this->m_ofile.write("[Debug]\t", sizeof("[Debug]"));
+			else if (severity_level == Severity::Info)
+				this->m_ofile.write("[Info]\t", sizeof("[Info]"));
+			else if (severity_level == Severity::Warning)
+				this->m_ofile.write("[Warning]\t", sizeof("[Warning]"));
+			else if (severity_level == Severity::Error)
+				this->m_ofile.write("[Error]\t", sizeof("[Error]"));
+			else if (severity_level == Severity::Fatal)
+				this->m_ofile.write("[Fatal]\t", sizeof("[Fatal]"));
+
+			auto current_time = GetCurrentTime();
+			this->m_ofile.write(current_time, 24);
+			this->m_ofile.write("\t", sizeof(""));
+
+			this->m_ofile.write(msg, sizeof(msg));
+			this->m_ofile.write("\t", sizeof(""));
+		}
 	}
 }
