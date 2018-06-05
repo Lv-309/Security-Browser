@@ -13,8 +13,8 @@ namespace ISXLog
 		template <typename T>
 		auto& operator<<(const T& msg);
 	protected:
-		File		file;
-		Severity	severity_level;
+		ISXFile::File file;
+		Severity severity_level;
 	};
 
 	template <typename T>
@@ -26,3 +26,5 @@ namespace ISXLog
 		return *this;
 	}
 }
+
+extern ISXLog::Log tlf;
