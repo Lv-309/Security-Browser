@@ -1,5 +1,7 @@
-#include "HttpClient.h"
 #include <vector>
+#include <string>
+
+#include "HttpClient.h"
 #include "Base64.h" // for image decoding
 #include "LogInfo.h"
 
@@ -42,7 +44,7 @@ namespace ISXHttpClient
 	pplx::task<void> HttpClient::core_auth_request_password_reset()
 	{	
 		//moodlewsrestformat=json
-		std::wstring str = L"/webservice/rest/server.php?moodlewsrestformat=json&wstoken=859b2244c55636be03408c2b0e208b03&wsfunction=core_auth_request_password_reset&username=ws_access&email=taras.serhii@gmail.com";
+		std::wstring str = L"/webservice/rest/server.php?&wstoken=859b2244c55636be03408c2b0e208b03&wsfunction=core_auth_request_password_reset&username=ws_access&email=taras.serhii@gmail.com";
 					
 			return client.request(
 				methods::GET, str).then([](http_response response)
@@ -67,21 +69,17 @@ namespace ISXHttpClient
 	}
 
 	pplx::task<void> HttpClient::request_files_upload(char* buffer, size_t lenght)
-	{	
-		char buffer_test[] = "test";
-		int lenght_test = 5;
-
-		std::string encoded_str = base64_encode(reinterpret_cast<const unsigned char*>(buffer_test), lenght_test);
+	{		
+		std::string encoded_str = base64_encode(reinterpret_cast<const unsigned char*>(buffer), lenght);
 		std::wstring wstr_encoded(encoded_str.begin(), encoded_str.end());		
 
-		std::wstring body = L"/webservice/rest/server.php?&wstoken=859b2244c55636be03408c2b0e208b03&wsfunction=core_files_upload&contextid=0&component=user&filearea=draft&itemid=0&filepath=/&filename=test.txt&filecontent=";
+		std::wstring body = L"/webservice/rest/server.php?&wstoken=859b2244c55636be03408c2b0e208b03&wsfunction=core_files_upload&contextid=0&component=user&filearea=draft&itemid=0&filepath=/&filename=photo1212.jpg&filecontent=";
 		
 		body.append(wstr_encoded);
 
 		body.append(L"&contextlevel=user&instanceid=7");				
 		
-		return client.request(methods::POST, body
-			).then([](http_response response)
+		return client.request(methods::POST, body).then([](http_response response)
 		{	
 			std::wostringstream ss;
 			ss << L"Server returned returned status code " << response.status_code() << L'.' << std::endl;
@@ -89,8 +87,9 @@ namespace ISXHttpClient
 			std::wcout << ss.str();
 
 			std::string out(ss.str().begin(), ss.str().end());
+			const char* info = out.c_str();
 
-			tlf_i << AT << out;
+			tlf_i << AT << info;
 
 			size_t lenght = (size_t)response.headers().content_length();
 
@@ -103,12 +102,12 @@ namespace ISXHttpClient
 				std::string &text = inStringBuffer.collection();
 				std::wstring wstr(text.begin(), text.end());
 
-				std::wcout << wstr << std::endl;
+				std::wcout << wstr << std::endl;				
 
 				std::string out(wstr.begin(), wstr.end());
+				const char* info = out.c_str();
 
-				tlf_i << AT << out;
-
+				tlf_i << AT << info;
 			});
 		});
 	}
