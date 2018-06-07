@@ -1,18 +1,24 @@
 #include "File.h"
 
-void File::OpenFile()
+void ISXFile::File::OpenFile()
 {
+	std::lock_guard<std::recursive_mutex> lock(mutex);
+
 	this->m_ofile.open("info_file.log", std::ios_base::app);
 }
 
-void File::CloseFile()
+void ISXFile::File::CloseFile()
 {
+	std::lock_guard<std::recursive_mutex> lock(mutex);
+
 	if (this->m_ofile.is_open())
 		this->m_ofile.close();
 }
 
-char* File::GetCurTime()
+char* ISXFile::File::GetCurTime()
 {
+	std::lock_guard<std::recursive_mutex> lock(mutex);
+
 	std::time_t result = std::time(nullptr);
 	return std::asctime(std::localtime(&result));
 }

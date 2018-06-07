@@ -182,6 +182,7 @@
     <ClInclude Include="WebCamera\Tools.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\Trace Utility\Writing to file\Project21\Project20\Log.cpp" />
     <ClCompile Include="TraceUtility\File.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
