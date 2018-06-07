@@ -164,7 +164,7 @@
     <ClCompile Include="WebBrowserMain\ChooseCameraWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\Trace Utility\Writing to file\Project21\Project20\Log.cpp">
+    <ClCompile Include="TraceUtility\Log.cpp">
       <Filter>TraceUtility</Filter>
     </ClCompile>
   </ItemGroup>
