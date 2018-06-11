@@ -73,7 +73,7 @@ namespace ISXHttpClient
 		std::string encoded_str = base64_encode(reinterpret_cast<const unsigned char*>(buffer), lenght);
 		std::wstring wstr_encoded(encoded_str.begin(), encoded_str.end());		
 
-		std::wstring body = L"/webservice/rest/server.php?&wstoken=859b2244c55636be03408c2b0e208b03&wsfunction=core_files_upload&contextid=0&component=user&filearea=draft&itemid=0&filepath=/&filename=photo1212.jpg&filecontent=";
+		std::wstring body = L"/webservice/rest/server.php?&wstoken=859b2244c55636be03408c2b0e208b03&wsfunction=core_files_upload&contextid=0&component=user&filearea=draft&itemid=0&filepath=/&filename=photo6.jpg&filecontent=";
 		
 		body.append(wstr_encoded);
 
@@ -82,8 +82,7 @@ namespace ISXHttpClient
 		return client.request(methods::POST, body).then([](http_response response)
 		{	
 			std::wostringstream ss;
-			ss << L"Server returned returned status code " << response.status_code() << L'.' << std::endl;
-			
+			ss << L"Server returned returned status code " << response.status_code() << L'.' << std::endl;			
 			std::wcout << ss.str();
 
 			std::string out(ss.str().begin(), ss.str().end());

@@ -9,7 +9,9 @@
 	{
 		char* data = Observer::getSubject()->getBufferData();
 
-		size_t size_buf = strlen(data);
+		size_t size_buf = Observer::getSubject()->getSize();
+
+		std::wcout << size_buf << std::endl;
 
 		pplx::task<void> requestTask = client.request_files_upload(data, size_buf);
 

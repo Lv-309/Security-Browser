@@ -6,10 +6,16 @@
 		collection.push_back(obs);
 	}
 
-	void Subject::setBufferData(char* val)
+	void Subject::setBufferData(char* val, size_t size)
 	{
+		lenght = size;
 		buffer_data = std::make_unique<char*>(val);
 		notify();
+	}
+
+	size_t Subject::getSize() const
+	{
+		return lenght;
 	}
 
 	char* Subject::getBufferData()
