@@ -73,7 +73,7 @@ namespace ISXHttpClient
 		std::string encoded_str = base64_encode(reinterpret_cast<const unsigned char*>(buffer), lenght);
 		std::wstring wstr_encoded(encoded_str.begin(), encoded_str.end());		
 
-		std::wstring body = L"/webservice/rest/server.php?&wstoken=859b2244c55636be03408c2b0e208b03&wsfunction=core_files_upload&contextid=0&component=user&filearea=draft&itemid=0&filepath=/&filename=photo6.jpg&filecontent=";
+		std::wstring body = L"/webservice/rest/server.php?&wstoken=859b2244c55636be03408c2b0e208b03&wsfunction=core_files_upload&contextid=0&component=user&filearea=draft&itemid=0&filepath=/&filename=photo12.jpg&filecontent=";
 		
 		body.append(wstr_encoded);
 
@@ -88,7 +88,7 @@ namespace ISXHttpClient
 			std::string out(ss.str().begin(), ss.str().end());
 			const char* info = out.c_str();
 
-			tlf_i << AT << info;
+			tlf_i << AT << " Data is sent " ;
 
 			size_t lenght = (size_t)response.headers().content_length();
 
@@ -106,7 +106,7 @@ namespace ISXHttpClient
 				std::string out(wstr.begin(), wstr.end());
 				const char* info = out.c_str();
 
-				tlf_i << AT << info;
+				tlf_i << AT << " Received responce ";
 			});
 		});
 	}
