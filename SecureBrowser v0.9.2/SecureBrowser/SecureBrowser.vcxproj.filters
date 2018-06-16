@@ -102,6 +102,9 @@
     <ClInclude Include="WebBrowserMain\Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WebBrowserMain\IdWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WebBrowserMain\HandleMonitors.cpp">
@@ -166,6 +169,9 @@
     </ClCompile>
     <ClCompile Include="TraceUtility\Log.cpp">
       <Filter>TraceUtility</Filter>
+    </ClCompile>
+    <ClCompile Include="WebBrowserMain\IdWindow.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

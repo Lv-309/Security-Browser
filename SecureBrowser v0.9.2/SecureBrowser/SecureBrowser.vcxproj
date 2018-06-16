@@ -167,6 +167,7 @@
     <ClInclude Include="WebBrowserMain\HandleMonitors.h" />
     <ClInclude Include="WebBrowserMain\HandleSession.h" />
     <ClInclude Include="WebBrowserMain\HelpTools.h" />
+    <ClInclude Include="WebBrowserMain\IdWindow.h" />
     <ClInclude Include="WebBrowserMain\MyWebBrowser.h" />
     <ClInclude Include="WebBrowserMain\MyWindow.h" />
     <ClInclude Include="WebBrowserMain\Resource.h" />
@@ -207,6 +208,7 @@
     <ClCompile Include="WebBrowserMain\ChooseCameraWindow.cpp" />
     <ClCompile Include="WebBrowserMain\HandleMonitors.cpp" />
     <ClCompile Include="WebBrowserMain\HandleSession.cpp" />
+    <ClCompile Include="WebBrowserMain\IdWindow.cpp" />
     <ClCompile Include="WebBrowserMain\MyWebBrowser.cpp" />
     <ClCompile Include="WebBrowserMain\MyWindow.cpp" />
     <ClCompile Include="WebBrowserMain\stdafx.cpp">
