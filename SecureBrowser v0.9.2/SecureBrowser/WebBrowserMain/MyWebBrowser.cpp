@@ -1,8 +1,12 @@
+#include <thread>
+
 #include "stdafx.h"
 #include "HelpTools.h"
 #include "VerifyLink.h"
 #include "MyWebBrowser.h"
 #include "HandleSession.h"
+#include "..\WebCamera\Frame.h"
+#include "..\WebCamera\FaceDetector.h"
 #include "..\TraceUtility\LogInfo.h"
 #include "..\TraceUtility\LogFatal.h"
 
@@ -10,30 +14,42 @@ using ISXVerifyLink::VerifyLink;
 using ISXHandleSession::HandleSession;
 using namespace ISXMyWebBrowser;
 
+
+
+
+HHOOK						MyWebBrowser::sm_msg_hook = nullptr;
+CComPtr<WebBrowserWindow>	MyWebBrowser::sm_lpwb_wnd = nullptr;
+
 MyWebBrowser::MyWebBrowser(HINSTANCE h_instance, LPCTSTR lpsz_link)
 	: MyWindow(TEXT("WebBrowser"), h_instance, TEXT("WebBrowserWindow"))
 	, m_handle_monitors()
 	, m_lpsz_link(lpsz_link)
 	, m_cc_wnd(this->m_hinstance)
-{ }
+	, id(this->m_hinstance)
+{ 
+	
+}
 
 MyWebBrowser::~MyWebBrowser()
 { }
-
-VOID MyWebBrowser::SetFont(const HWND label_handle) const noexcept
+BOOL MyWebBrowser::InitDialog()
 {
-	const short FONT_SIZE = 13;
-	LPCTSTR font_name = TEXT("Verdana");
-	HDC hdc = GetDC(label_handle);
+	sm_msg_hook = SetWindowsHookEx(WH_GETMESSAGE, GetMsgHookProc, NULL, GetCurrentThreadId());
+	//g_hook_wnd = SetWindowsHookEx(WH_KEYBOARD_LL, (HOOKPROC)this->SomeProc, this->m_hinstance, 0);
+	return TRUE;
+}
+VOID MyWebBrowser::SetFont(const HWND handle, LPCTSTR font_name, SHORT font_size, LONG font_weight) const noexcept
+{
+	HDC hdc = GetDC(handle);
 	LOGFONT log_font = { 0 };
 
-	log_font.lfHeight = -MulDiv(FONT_SIZE, GetDeviceCaps(hdc, LOGPIXELSY), 72);
-	log_font.lfWeight = FW_MEDIUM;
+	log_font.lfHeight = -MulDiv(font_size, GetDeviceCaps(hdc, LOGPIXELSY), 72);
+	log_font.lfWeight = font_weight;
 	_tcscpy_s(log_font.lfFaceName, font_name);
 
 	HFONT h_font = CreateFontIndirect(&log_font);
-	ReleaseDC(label_handle, hdc);
-	SendMessage(label_handle, WM_SETFONT, (WPARAM)h_font, (LPARAM)MAKELONG(TRUE, 0));
+	ReleaseDC(handle, hdc);
+	SendMessage(handle, WM_SETFONT, (WPARAM)h_font, (LPARAM)MAKELONG(TRUE, 0));
 }
 
 HWND MyWebBrowser::CreateLabel(LPCTSTR lpsz_text, const RECT& rc, HWND hwnd) const noexcept
@@ -86,7 +102,7 @@ HWND MyWebBrowser::CreateEditBox(LPCTSTR lpsz_lnk, const RECT& rc, HWND hwnd) co
 		(INT)rc.left, (INT)rc.top,
 		(INT)rc.right, (INT)rc.bottom,
 		hwnd,
-		NULL,
+		(HMENU)WndControls::ID_EDIT_BOX,
 		this->m_hinstance,
 		NULL
 	);
@@ -94,9 +110,14 @@ HWND MyWebBrowser::CreateEditBox(LPCTSTR lpsz_lnk, const RECT& rc, HWND hwnd) co
 
 VOID MyWebBrowser::UpdateLink() const
 {
+	static BSTR s_bstr = nullptr;
 	BSTR bstr;
-	this->m_lpwb_wnd->GetURL(&bstr);
-	SetWindowText(this->m_hwnd_address_bar, bstr);
+	this->m_lpwb_wnd->GetURL(&bstr);	
+	if (s_bstr != bstr)
+	{
+		SetWindowText(this->m_hwnd_address_bar, bstr);
+		s_bstr = bstr;
+	}
 	SysFreeString(bstr);
 }
 
@@ -115,8 +136,8 @@ MyWebBrowser* MyWebBrowser::CreateSafe(HINSTANCE h_instance, LPCTSTR lpsz_link)
 		return nullptr;
 	// Verify session on remote or virtual access
 	HandleSession	handle_session;
-	//	if (handle_session.Verify() != ErrorTypes::IS_OK)
-	//		return nullptr;
+		//if (handle_session.Verify() != ErrorTypes::IS_OK)
+		//	return nullptr;
 	// If is ok, return object
 	return new MyWebBrowser(h_instance, lpsz_link);
 }
@@ -145,16 +166,28 @@ ErrorTypes MyWebBrowser::Authentication(HWND hwnd, const RECT& rc_client) noexce
 	return ErrorTypes::IS_OK;
 }
 
+void MyWebBrowser::IdCreation()
+{
+	HWND parent = FindWindow(TEXT("WebBrowserWindow"), NULL);
+	this->id.CreateIdWindow(parent);
+}
+
 ErrorTypes MyWebBrowser::TestPassing(HWND hwnd, const RECT& rc_client) noexcept
 {
 	// Create window of our web browser
 	// in client side case
-	this->m_lpwb_wnd = new WebBrowserWindow(hwnd);
+	sm_lpwb_wnd = this->m_lpwb_wnd = new WebBrowserWindow(hwnd);
 	RECT rc = { 0, 45, rc_client.right, rc_client.bottom };;
 	this->m_lpwb_wnd->SetRect(rc);
 	this->m_lpwb_wnd->Navigate(m_lpsz_link);
 
+	/*ISXFaceDetector::FaceDetector fd(0);
+	std::thread t(std::bind(&ISXFaceDetector::FaceDetector::Run, &fd, 1, 25, 1));
+	t.join();*/
+
 	tlf_i << AT << "User start test passing";
+
+
 	return ErrorTypes::IS_OK;
 }
 
@@ -163,14 +196,17 @@ LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LP
 	RECT		rc_client;
 	RECT		rc_logo = { 10, 13, 200, 20 }, rc_edit, rc_go;
 	LONG		style;
-	DWORD		label_id;
-
+	DWORD		ctrl_id;
+	INT			status;
 	switch (u_msg)
 	{
 	// Create window
+	//case WM_INITDIALOG:
+		//return InitDialog();
 	case WM_CREATE:
 		// Set window params
-		SetWindowPos(hwnd, HWND_TOP, 0, 0, 0, 0, NULL);
+		InitDialog();
+		SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, NULL);
 		style = GetWindowLong(hwnd, GWL_STYLE);
 		style &= ~WS_MAXIMIZEBOX;
 		style &= ~WS_MINIMIZEBOX;
@@ -179,38 +215,55 @@ LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LP
 		ShowWindow(hwnd, SHOW_FULLSCREEN);
 
 		GetClientRect(hwnd, &rc_client);
+	//ID
+		IdCreation();
 	// Create controls
 		HWND label_handle;
 		label_handle = this->CreateLabel(TEXT("Secure Browser"), rc_logo, hwnd);
-		this->SetFont(label_handle);
-		rc_go   = { rc_client.right - 80, 12, 50, 25 };
+		this->SetFont(label_handle, TEXT("Verdana"), 13, FW_MEDIUM);
+		rc_go   = { rc_client.right - 90, 12, 75, 25 };
 		this->CreateButton(TEXT("Go"), rc_go, hwnd);
-		rc_edit = { 155, 12, rc_client.right - 250, 25 };
+		rc_edit = { 150, 12, rc_client.right - 250, 25 };
 		this->m_hwnd_address_bar = this->CreateEditBox(TEXT(""), rc_edit, hwnd);
-		this->SetFont(this->m_hwnd_address_bar);
+		this->SetFont(this->m_hwnd_address_bar, TEXT("Verdana"), 11, FW_LIGHT);
+
 		// EnableWindow(this->m_hwnd_address_bar, FALSE);
 
-		if (this->Authentication(hwnd, rc_client) != ErrorTypes::IS_OK)
-			PostMessage(hwnd, WM_CLOSE, NULL, NULL); // TODO: do right exit
+		//if (this->Authentication(hwnd, rc_client) != ErrorTypes::IS_OK)
+		//	PostMessage(hwnd, WM_CLOSE, NULL, NULL); // TODO: do right exit
 
 		this->TestPassing(hwnd, rc_client);
 		return 0;
-	case WM_CTLCOLORSTATIC:
-		label_id = GetDlgCtrlID((HWND)l_param);
-		if (label_id == (INT)WndControls::ID_LOGO)
+	case WM_COMMAND:
+		if (LOWORD(w_param) == (INT)WndControls::ID_GO_BTN)
 		{
-			SetBkColor((HDC)w_param, LIGHT_BLUE);
-			SetTextColor((HDC)w_param, RGB(104, 104, 205));
-			return (INT_PTR)CreateSolidBrush(LIGHT_BLUE);
+			TCHAR* sz_url = new TCHAR[1024];
+			GetWindowText(this->m_hwnd_address_bar, sz_url, 1024);
+			sm_lpwb_wnd ->Navigate(sz_url);
 		}
 		return 0;
+	case WM_CTLCOLORSTATIC:
+		ctrl_id = GetDlgCtrlID((HWND)l_param);
+		if (ctrl_id == (INT)WndControls::ID_LOGO)
+		{
+			SetBkColor((HDC)w_param, LIGHT_BLUE);
+			SetTextColor((HDC)w_param, RGB(100, 100, 215));
+			return (INT_PTR)CreateSolidBrush(LIGHT_BLUE);
+		}
+		/*if (ctrl_id == (INT)WndControls::ID_EDIT_BOX)
+		{
+			SetTextColor((HDC)w_param, RGB(100, 100, 215));
+			return (INT_PTR)CreateSolidBrush(LIGHT_BLUE);
+		}*/
+		
+		return 0;
 	// Prevent move wnd
-	//case WM_SYSCOMMAND:
-	//	status = (INT)w_param & 0xfff0;
-	//	if (status == SC_MOVE)
-	//		return 0;
-	//	else if (status == SC_CLOSE)
-	//		return DefWindowProc(hwnd, u_msg, w_param, l_param);
+	/*case WM_SYSCOMMAND:
+		status = (INT)w_param & 0xfff0;
+		if (status == SC_MOVE)
+			return 0;
+		else if (status == SC_CLOSE)
+			return DefWindowProc(hwnd, u_msg, w_param, l_param);*/
 	case WM_CLOSE:
 		EnableWindow(hwnd, FALSE);
 		if (WARNING_BOX("You really want to close browser?") == IDNO)
@@ -221,9 +274,89 @@ LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LP
 		}
 		return DestroyWindow(hwnd);
 	case WM_DESTROY:
+		
 		PostQuitMessage(0);
 		return 0;
 	default:
 		return DefWindowProc(hwnd, u_msg, w_param, l_param);
 	}
 }
+
+LRESULT FAR PASCAL MyWebBrowser::GetMsgHookProc(int nCode, WPARAM wParam, LPARAM lParam)
+{
+	BOOL eat_keystroke = FALSE;
+	static BOOL cheat = false;
+	static int count = 0;
+	if (nCode >= 0 && PM_REMOVE == wParam)
+	{
+		MSG* pMsg = (MSG*)lParam;
+		switch (pMsg->message)
+		{
+		case WM_KEYDOWN:
+		case WM_SYSKEYDOWN:
+			//PKBDLLHOOKSTRUCT p = (PKBDLLHOOKSTRUCT)lParam;
+			switch (count)
+			{
+			case 0:
+				if (GetKeyState(0x4C) & IS_PRESSED)
+				{
+					cheat = true;
+					count++;
+				}
+				break;
+			case 1:
+				if (GetKeyState(0x56) & IS_PRESSED)
+					count++;
+				else
+					count = 0;
+				break;
+			case 2:
+				if (GetKeyState(VK_OEM_MINUS) & IS_PRESSED)
+					count++;
+				else
+					count = 0;
+				break;
+			case 3:
+				if (GetKeyState(0x33) & IS_PRESSED)
+					count++;
+				else
+					count = 0;
+				break;
+			case 4:
+				if (GetKeyState(0x30) & IS_PRESSED)
+					count++;
+				else
+					count = 0;
+				break;
+			case 5:
+				if (GetKeyState(0x39) & IS_PRESSED)
+					WARNING_BOX("LV-309");
+				count = 0;
+				break;
+			}
+			if(GetKeyState(VK_CONTROL) & IS_PRESSED && GetKeyState(VK_KEY_C) & IS_PRESSED)
+			{ 
+				//WARNING_BOX("Ctrl+C was pressed");
+				eat_keystroke = TRUE;
+			}
+			if (GetKeyState(VK_CONTROL) & 0x8000 && GetKeyState(VK_OEM_PLUS) & 0x8000)
+			{
+				//WARNING_BOX("Zoom +");
+				eat_keystroke = TRUE;
+			}
+		}
+		// Don't translate non-input events.
+		if ((pMsg->message >= WM_KEYFIRST && pMsg->message <= WM_KEYLAST))
+		{
+
+			if (pMsg && eat_keystroke == FALSE)
+			{
+				sm_lpwb_wnd->DoPageAction(pMsg);
+			}
+
+		}
+	}
+	return CallNextHookEx(sm_msg_hook, nCode, wParam, lParam);
+}
+
+

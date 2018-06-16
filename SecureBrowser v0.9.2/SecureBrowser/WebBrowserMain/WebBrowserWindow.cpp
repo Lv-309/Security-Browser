@@ -106,6 +106,12 @@ VOID WebBrowserWindow::DoPageAction(MSG* msg)
 
 			pIOIPAO->TranslateAccelerator(msg);
 			pIOIPAO->Release();
+			if (msg->wParam == VK_TAB)
+			{
+				msg->wParam = 0;
+				msg->lParam = 0;
+				msg->hwnd = nullptr;
+			}
 		}
 	}
 }

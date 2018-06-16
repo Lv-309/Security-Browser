@@ -10,7 +10,6 @@ HandleSession::HandleSession()
 
 bool HandleSession::Remote() const
 {
-	//return true;		// to miss checking
 	if (GetSystemMetrics(SM_REMOTESESSION))
 		return true;
 	return false;
@@ -18,37 +17,14 @@ bool HandleSession::Remote() const
 
 bool HandleSession::Virtual() const
 {
-	bool rc = true;
-	//__try
-	//{
-	//	__asm
-	//	{
-	//		push   edx
+	return false;
+	if (CreateFile(L"\\\\.\\VBoxMiniRdrDN", GENERIC_READ, FILE_SHARE_READ,
+		nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr) != INVALID_HANDLE_VALUE)
+	{
+		return true;
+	}
 
-	//		push   ecx
-	//		push   ebx
-
-	//		mov    eax, 'VMXh'
-	//		mov    ebx, 0		// any value but not the MAGIC VALUE
-	//		mov    ecx, 10		// get VMWare version
-	//		mov    edx, 'VX'	// port number
-
-	//		in     eax, dx		// read port
-	//							// on return EAX returns the VERSION
-	//		cmp    ebx, 'VMXh'	// is it a reply from VMWare?
-	//		setz[rc]			// set return value
-
-	//		pop    ebx
-	//		pop    ecx
-	//		pop    edx
-	//	}
-	//}
-	//__except (EXCEPTION_EXECUTE_HANDLER)
-	//{
-	//	rc = false;
-	//}
-	rc = false;
-	return rc;
+	return false;
 }
 
 ErrorTypes HandleSession::Verify() const
