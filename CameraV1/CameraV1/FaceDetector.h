@@ -4,27 +4,38 @@
 #include<vector>
 #include<chrono>
 
-#include<opencv2\objdetect.hpp>
+#include <opencv2\objdetect.hpp>
 
-#include"Camera.h"
+#include"Frame.h"
 
 namespace ISXFaceDetector
 {
-class FaceDetector : protected ISXCamera::Camera
+class FaceDetector
 {
 public:
-	FaceDetector();
+	FaceDetector(int num_of_chosen_camera = 0); // add algorithm, path for saving
 	~FaceDetector() {};
 
-	void Detect();
-	void Check(const std::vector<cv::Rect>& faces);
+	ISXFrame::Frame CaptureFrame();
+
+	// algorithms for detecting suspicious behaviour and saving photos
+	void SmartDetectAndSave(int test_duration_in_min = 40, int max_amount_of_photos = 50, int interval_in_sec_check_suspicious_behaviour = 5);
+	void SaveWithInterval(int interval_in_sec = 5);
+	void SaveConstantly();
+	
+	// final algorithm for a separate thread (doesn't open an output window)
+	void Run(int test_duration_in_min = 40, int max_amount_of_photos = 50, int interval_in_sec_check_suspicious_behaviour = 5);
+
+	// auxiliary functions
 	void DrawRectAroundFaces(std::vector<cv::Rect> faces);
+	void SaveZeroAndManyFaces(const std::vector<cv::Rect>& faces);
+	bool PositionChanged(int x, int width, int y, int height, int delta = 15);
+
 
 private:
-	cv::CascadeClassifier m_detector;
+	cv::VideoCapture camera;
+	ISXFrame::Frame frame;
+	cv::CascadeClassifier detector;
 	const std::string CASCADE_FILE = "haarcascade_frontalface_alt.xml";
-	ISXFrame::Frame m_frame;
-	/*std::chrono::seconds pause_time = std::chrono::seconds(3);
-	std::chrono::steady_clock::time_point last_time_check = std::chrono::high_resolution_clock::time_point(std::chrono::seconds(0));*/
 };
 }
