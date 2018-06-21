@@ -41,57 +41,33 @@ namespace ISXHttpClient
 		return *this;
 	}	
 
-	pplx::task<void> HttpClient::core_auth_request_password_reset()
-	{	
-		//moodlewsrestformat=json
-		std::wstring str = L"/webservice/rest/server.php?&wstoken=859b2244c55636be03408c2b0e208b03&wsfunction=core_auth_request_password_reset&username=ws_access&email=taras.serhii@gmail.com";
-					
-			return client.request(
-				methods::GET, str).then([](http_response response)
-			{		
-				std::wostringstream ss;
-				ss << L"Server returned returned status code " << response.status_code() << L'.' << std::endl;
-				std::wcout << ss.str();
-		
-				size_t lenght = (size_t)response.headers().content_length();		
-				
-				istream bodyStream = response.body();
-		
-				container_buffer<std::string> inStringBuffer;
-				return bodyStream.read(inStringBuffer, lenght).then([inStringBuffer](size_t bytesRead)
-				{
-					std::string &text = inStringBuffer.collection();
-					std::wstring wstr(text.begin(),text.end());
-		
-					std::wcout << wstr << std::endl;			
-				});		
-			});
-	}
-
-	pplx::task<void> HttpClient::request_files_upload(char* buffer, size_t lenght)
+	pplx::task<void> HttpClient::request_files_upload(char* buffer, size_t lenght, utility::string_t filename)
 	{		
 		std::string encoded_str = base64_encode(reinterpret_cast<const unsigned char*>(buffer), lenght);
 		std::wstring wstr_encoded(encoded_str.begin(), encoded_str.end());		
 
-		std::wstring body = L"/webservice/rest/server.php?&wstoken=859b2244c55636be03408c2b0e208b03&wsfunction=core_files_upload&contextid=0&component=user&filearea=draft&itemid=0&filepath=/&filename=photo12.jpg&filecontent=";
+		std::wstring body = L"/webservice/rest/server.php?&wstoken=859b2244c55636be03408c2b0e208b03&wsfunction=core_files_upload&contextid=0&component=user&filearea=draft&itemid=0&filepath=/&filename=";
+			
+		body.append(filename);
+		body.append(L"&filecontent=");
 		
 		body.append(wstr_encoded);
-
 		body.append(L"&contextlevel=user&instanceid=7");				
 		
 		return client.request(methods::POST, body).then([](http_response response)
 		{	
+			if (response.status_code() == status_codes::OK)
+			{
+				tlf_i << AT << "Server returned status code 200";
+			}			
+			
+			// output on a consol
 			std::wostringstream ss;
 			ss << L"Server returned returned status code " << response.status_code() << L'.' << std::endl;			
 			std::wcout << ss.str();
-
-			std::string out(ss.str().begin(), ss.str().end());
-			const char* info = out.c_str();
-
-			tlf_i << AT << " Data is sent " ;
-
+		
+			// retrieve a response
 			size_t lenght = (size_t)response.headers().content_length();
-
 			istream bodyStream = response.body();
 
 			container_buffer<std::string> inStringBuffer;
@@ -103,11 +79,8 @@ namespace ISXHttpClient
 
 				std::wcout << wstr << std::endl;				
 
-				std::string out(wstr.begin(), wstr.end());
-				const char* info = out.c_str();
-
-				tlf_i << AT << " Received responce ";
+				tlf_i << AT << "Received responce";
 			});
-		});
+		});	
 	}
 }

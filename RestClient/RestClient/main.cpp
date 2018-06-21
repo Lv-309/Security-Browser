@@ -18,13 +18,14 @@ int wmain()
 	char* buffer = nullptr;
 	size_t size = 0;
 
-	const char file_path[] = "image2.jpg";
+	const char file_path[] = "text.txt";
 
 	std::ifstream is(file_path);
 
 	if (!is.is_open())
 	{
 		std::wcout << "Can't open file" << std::endl;
+		system("pause");
 		is.close();
 		return -1;
 	}
@@ -38,7 +39,7 @@ int wmain()
 	Subject subj;
 	RestClient client(&subj);	
 
-	subj.setBufferData(buffer, size);	
+	subj.setBufferData(buffer, size, L"text2.txt");	
 
 	std::wcout << "Enter any key to continue..." << std::endl;
 	std::cin.get();

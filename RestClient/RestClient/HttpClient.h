@@ -25,8 +25,7 @@ namespace ISXHttpClient
 
 		HttpClient& operator=(HttpClient&&);
 		
-		pplx::task<void> request_files_upload(char* buffer, size_t lenght);
-		pplx::task<void> core_auth_request_password_reset();
+		pplx::task<void> request_files_upload(char* buffer, size_t lenght, utility::string_t filename);		
 
 	private:
 		uri base_url;
