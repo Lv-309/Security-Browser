@@ -12,12 +12,14 @@ public:
 	~Frame() {};
 
 	void SaveFrameToFile(std::string saving_path_and_name) { cv::imwrite(saving_path_and_name,  frame); }
+
 	void ShowFrame()
 	{
 		if (frame.empty()) system("pause");
 		else cv::imshow("Output",  frame);
 	}
-	bool IsFrameEmpty() //function not used, can be deleted
+
+	bool IsFrameEmpty() //function used for unit testing only
 	{
 		if (frame.empty())
 		{
@@ -30,6 +32,18 @@ public:
 	}
 
 	cv::Mat& get_frame() { return  frame; }
+
+	Frame& operator = (const cv::Mat& new_frame)
+	{
+		this->frame = new_frame;
+		return *this;
+	}
+
+	Frame& operator = (const Frame& new_frame)
+	{
+		this->frame = new_frame.frame;
+		return *this;
+	}
 
 private:
 	cv::Mat frame;

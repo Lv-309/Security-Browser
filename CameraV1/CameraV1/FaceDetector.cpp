@@ -1,8 +1,8 @@
 #include "FaceDetector.h"
 
-#define ESCAPE 27 //??? "In general macros should not be used."
+#define ESCAPE 27
 
-#define SEC std::chrono::seconds // can we do it with typedef?
+#define SEC std::chrono::seconds
 #define GET_CURRENT_TIME std::chrono::high_resolution_clock::now()
 
 namespace ISXFaceDetector
@@ -28,9 +28,34 @@ FaceDetector::FaceDetector(int num_of_chosen_camera)
 	if (detector.empty())
 	{
 		std::cout << "empty cascade\n";
-		system("pause");
+		//system("pause");
 	}
 }
+
+void FaceDetector::RestartFaceDetector(int num_of_chosen_camera)
+{
+	//load num_of_chosen_camera-th camera
+	camera.open(num_of_chosen_camera);
+
+	if (!camera.isOpened())
+	{
+		//TO DO
+		//send msg "try reconnecting your camera into another port"
+
+		std::cout << "can't find " << num_of_chosen_camera << "-th camera " << std::endl;
+		system("pause");
+		return;
+	}
+
+	stop = false;
+}
+
+void FaceDetector::StopFaceDetector()
+{
+	stop = true;
+	std::cout << "Thread will be stopped." << std::endl; // for debug
+}
+
 
 ISXFrame::Frame FaceDetector::CaptureFrame()
 {
@@ -68,15 +93,11 @@ void FaceDetector::SaveZeroAndManyFaces(const std::vector<cv::Rect>& faces)
 		frame.SaveFrameToFile("..\\Photos\\No face\\no face " + std::to_string(++num_of_no_face) + ".jpg");
 		std::cout << "No face\n";
 	}
-	else
-	{
-		std::cout << "I see you =)\n";
-	}
+	else { std::cout << "One face detected" << std::endl; }
 }
 
-void FaceDetector::DrawRectAroundFaces(std::vector<cv::Rect> faces)
+void FaceDetector::DrawRectAroundFaces(const std::vector<cv::Rect>& faces)
 {
-
 	for (int i = 0; i < faces.size(); i++)
 	{
 		cv::Rect r = faces[i];
@@ -111,7 +132,7 @@ void FaceDetector::SaveWithInterval(int interval_in_sec)
 			DrawRectAroundFaces(faces);
 			frame.ShowFrame();
 
-			if (faces.size() > 1) { frame.SaveFrameToFile("..\\Photos\\Many faces\\" + std::to_string(++num_of_many_faces) + '-' + std::to_string(faces.size()) + " faces.jpg"); }
+			if		(faces.size() >	 1) { frame.SaveFrameToFile("..\\Photos\\Many faces\\" + std::to_string(++num_of_many_faces) + '-' + std::to_string(faces.size()) + " faces.jpg"); }
 			else if (faces.size() == 0) { frame.SaveFrameToFile("..\\Photos\\No face\\" + std::to_string(++num_of_no_face) + '-' + std::to_string(faces.size()) + " face.jpg"); }
 			else { frame.SaveFrameToFile("..\\Photos\\One face\\" + std::to_string(++num_of_one_face) + '-' + std::to_string(faces.size()) + ".jpg"); }
 			
@@ -124,12 +145,27 @@ void FaceDetector::SaveWithInterval(int interval_in_sec)
 
 bool FaceDetector::PositionChanged(int new_x0, int new_x1, int new_y0, int new_y1, int delta)
 {
-	static int x0 = 0, x1 = 0, y0 = 0, y1 = 0;
-	if ((abs(new_x0 - x0) < delta) && (abs(new_x1 - x1) < delta) && (abs(new_y0 - y0) < delta) && (abs(new_y1 - y1) < delta)) return 0;
-	else return 1;
+	if ((abs(new_x0 - x0) > delta) || (abs(new_x1 - x1) > delta) || (abs(new_y0 - y0) > delta) || (abs(new_y1 - y1) > delta))
+	{
+		x0 = new_x0;
+		y0 = new_y0;
+		x1 = new_x1;
+		y1 = new_y1;
+
+		return true;
+	}
+	else
+	{
+		x0 = new_x0;
+		y0 = new_y0;
+		x1 = new_x1;
+		y1 = new_y1;
+
+		return false;
+	}
 }
 
-void FaceDetector::SmartDetectAndSave(int test_duration_in_min, int max_amount_of_photos, int interval_in_sec_check_suspicious_behaviour)
+int FaceDetector::SmartDetectAndSave(int test_duration_in_min, int max_amount_of_photos, int interval_in_sec_check_suspicious_behaviour)
 {
 	static int photos_num_save_with_intervals = (int) 0.3 * max_amount_of_photos + 1; // at least one photo will always be saved
 	static int photos_num_save_if_suspicious = max_amount_of_photos - photos_num_save_with_intervals;
@@ -225,21 +261,22 @@ void FaceDetector::SmartDetectAndSave(int test_duration_in_min, int max_amount_o
 		}
 	}
 	cvDestroyWindow("Output");
+	return num_of_no_face + num_of_one_face + num_of_many_faces;
 }
 
-void FaceDetector::Run(int test_duration_in_min, int max_amount_of_photos, int interval_in_sec_check_suspicious_behaviour)
+int FaceDetector::Run(int test_duration_in_min, int max_amount_of_photos, int interval_in_sec_check_suspicious_behaviour)
 {
-	static int photos_num_save_with_intervals = (int) 0.3 * max_amount_of_photos + 1; // at least one photo will always be saved
-	static int photos_num_save_if_suspicious = max_amount_of_photos - photos_num_save_with_intervals;
+	static std::atomic_int  photos_num_save_with_intervals = (int) 0.3 * max_amount_of_photos + 1; // at least one photo will always be saved
+	static std::atomic_int photos_num_save_if_suspicious = max_amount_of_photos - photos_num_save_with_intervals;
 
 	int save_interval = (int)test_duration_in_min * 60 / photos_num_save_with_intervals;
 	int check_interval = interval_in_sec_check_suspicious_behaviour;
 
 	std::vector<cv::Rect> faces;
 
-	static int num_of_no_face = 0;
-	static int num_of_one_face = 0;
-	static int num_of_many_faces = 0;
+	static std::atomic_int num_of_no_face = 0;
+	static std::atomic_int num_of_one_face = 0;
+	static std::atomic_int num_of_many_faces = 0;
 
 	bool only_one_face_was_detected = false;
 	
@@ -247,8 +284,10 @@ void FaceDetector::Run(int test_duration_in_min, int max_amount_of_photos, int i
 	auto time_of_last_save = (std::chrono::steady_clock::time_point) SEC(-check_interval);
 	auto time_of_last_check = (std::chrono::steady_clock::time_point) SEC(-check_interval);
 
-	while (cv::waitKey(30) != ESCAPE)
+	while (stop == false)
 	{
+		std::cout << "Run()" << std::endl; // for debug
+
 		current_time = GET_CURRENT_TIME;
 		SEC duration_after_save = std::chrono::duration_cast<SEC>(current_time - time_of_last_save);
 		SEC duration_after_check = std::chrono::duration_cast<SEC>(current_time - time_of_last_check);
@@ -263,13 +302,15 @@ void FaceDetector::Run(int test_duration_in_min, int max_amount_of_photos, int i
 			}
 
 			frame = CaptureFrame();
-			detector.detectMultiScale(frame.get_frame(), faces, 1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT, cv::Size(60, 60));
-			DrawRectAroundFaces(faces);
 
 			//check if frame is valid
 			//if not - camera was disconnected or another problem appeared
 			if (frame.get_frame().empty())
 				system("pause"); // TO DO send msg to main thread
+
+			detector.detectMultiScale(frame.get_frame(), faces, 1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT, cv::Size(60, 60));
+			DrawRectAroundFaces(faces);
+
 
 			if ((faces.size() > 1) || (faces.size() == 0))
 			{
@@ -307,13 +348,14 @@ void FaceDetector::Run(int test_duration_in_min, int max_amount_of_photos, int i
 			}
 
 			frame = CaptureFrame();
-			detector.detectMultiScale(frame.get_frame(), faces, 1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT, cv::Size(60, 60));
-			DrawRectAroundFaces(faces);
-
+			
 			//check if frame is valid
 			//if not - camera was disconnected or another problem appeared
 			if (frame.get_frame().empty())
 				system("pause"); // TO DO send msg to main thread
+
+			detector.detectMultiScale(frame.get_frame(), faces, 1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT, cv::Size(60, 60));
+			DrawRectAroundFaces(faces);
 
 			if ((faces.size() > 1) || (faces.size() == 0))
 			{
@@ -329,6 +371,6 @@ void FaceDetector::Run(int test_duration_in_min, int max_amount_of_photos, int i
 			time_of_last_check = GET_CURRENT_TIME;
 		}
 	}
-	cvDestroyWindow("Output");
+	return num_of_no_face + num_of_one_face + num_of_many_faces;
 }
 }
