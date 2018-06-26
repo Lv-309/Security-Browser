@@ -136,7 +136,7 @@
     <ClInclude Include="Base64.h" />
     <ClInclude Include="HttpClient.h" />
     <ClInclude Include="Observer.h" />
-    <ClInclude Include="RestClien.h" />
+    <ClInclude Include="RestClient.h" />
     <ClInclude Include="Subject.h" />
   </ItemGroup>
   <ItemGroup>
