@@ -12,26 +12,26 @@ using namespace concurrency;
 using namespace concurrency::streams;
 
 namespace ISXHttpClient 
-{	
-
+{
 	class HttpClient
 	{
 
 	public:
-		HttpClient();
-		HttpClient(utility::string_t, utility::string_t);
+		HttpClient();		
 		HttpClient(HttpClient&&);
 		~HttpClient();
 
 		HttpClient& operator=(HttpClient&&);
 		
-		pplx::task<void> request_files_upload(char* buffer, size_t lenght, utility::string_t filename);		
+		pplx::task<void> request_files_upload(char* buffer, size_t lenght, utility::string_t filename);	
+		bool openConfigFile(std::string);
 
 	private:
 		uri base_url;
-		http_client client;		
-		utility::string_t user_name;
-		utility::string_t user_password;
+		http_client client;
+		std::wstring token;
+		std::wstring domen;
+		
 	};
 	
 }

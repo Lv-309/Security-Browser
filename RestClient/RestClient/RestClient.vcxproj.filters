@@ -15,6 +15,23 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Base64.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HttpClient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RestClien.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Subject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="Base64.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -24,31 +41,14 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="File.cpp">
+    <ClCompile Include="Observer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Base64.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HttpClient.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Log.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LogInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Severity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="File.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <ClCompile Include="RestClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Subject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

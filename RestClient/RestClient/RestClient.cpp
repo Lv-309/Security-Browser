@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "RestClient.h"
+#include "RestClien.h"
 #include <algorithm>
 #include <regex>
 //#include "LogError.h"
@@ -28,6 +28,11 @@
 			std::wcout << "Error exception: " << e.what() << std::endl;
 			//tlf_e << AT << "WinHttpSendRequest: 12029 (No internet connection)";			
 		}
+	}
+
+	void RestClient::SetConfigFile(std::string fileConfig)
+	{
+		client.openConfigFile(fileConfig);
 	}
 
 	

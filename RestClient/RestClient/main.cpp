@@ -1,5 +1,5 @@
 ﻿#include "Subject.h"
-#include "RestClient.h"
+#include "RestClien.h"
 
 #include <iostream>
 
@@ -18,7 +18,7 @@ int wmain()
 	char* buffer = nullptr;
 	size_t size = 0;
 
-	const char file_path[] = "text.txt";
+	const char file_path[] = "image2.jpg";
 
 	std::ifstream is(file_path);
 
@@ -39,7 +39,9 @@ int wmain()
 	Subject subj;
 	RestClient client(&subj);	
 
-	subj.setBufferData(buffer, size, L"text2.txt");	
+	client.SetConfigFile("config.txt");
+
+	subj.setBufferData(buffer, size, L"image2.jpg");
 
 	std::wcout << "Enter any key to continue..." << std::endl;
 	std::cin.get();

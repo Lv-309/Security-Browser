@@ -1,4 +1,9 @@
-﻿  HttpClient.cpp
+﻿  Base64.cpp
+  HttpClient.cpp
   main.cpp
+  Observer.cpp
+  RestClient.cpp
+  Subject.cpp
+e:\restclient\restclient\subject.cpp(37): warning C4018: '<': signed/unsigned mismatch
   Generating Code...
-  RestClient.vcxproj -> E:\SoftServeCourse\Tasks\RestClient\RestClient\Debug\RestClient.exe
+cpprest140d_2_9.lib(cpprest140d_2_9.dll) : fatal error LNK1112: module machine type 'x64' conflicts with target machine type 'x86'

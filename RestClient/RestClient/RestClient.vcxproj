@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{E83C0725-D6C4-47B4-A020-8D3B818B89D0}</ProjectGuid>
+    <ProjectGuid>{F3BB5C15-68FE-42D5-ABD2-4F1904388CF1}</ProjectGuid>
     <RootNamespace>RestClient</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -69,15 +69,24 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(SolutionDir)cpprestv140\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)cpprestv140\lib\Debug;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(SolutionDir)cpprestv140\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)cpprestv140\lib\x64\Debug;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>cpprest140d_2_9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -85,8 +94,10 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>cpprest140d_2_9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -96,7 +107,6 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -111,7 +121,6 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -119,30 +128,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Base64.h" />
+    <ClInclude Include="HttpClient.h" />
+    <ClInclude Include="Observer.h" />
+    <ClInclude Include="RestClien.h" />
+    <ClInclude Include="Subject.h" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="Base64.cpp" />
-    <ClCompile Include="File.cpp" />
     <ClCompile Include="HttpClient.cpp" />
     <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Base64.h" />
-    <ClInclude Include="File.h" />
-    <ClInclude Include="HttpClient.h" />
-    <ClInclude Include="Log.h" />
-    <ClInclude Include="LogInfo.h" />
-    <ClInclude Include="Severity.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <ClCompile Include="Observer.cpp" />
+    <ClCompile Include="RestClient.cpp" />
+    <ClCompile Include="Subject.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.2.9.1\build\native\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.targets" Condition="Exists('..\packages\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.2.9.1\build\native\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.targets')" />
   </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.2.9.1\build\native\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.2.9.1\build\native\cpprestsdk.v140.windesktop.msvcstl.dyn.rt-dyn.targets'))" />
-  </Target>
 </Project>

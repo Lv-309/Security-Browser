@@ -1,21 +1,16 @@
 #include <vector>
 #include <string>
+#include <fstream>
 
 #include "HttpClient.h"
 #include "Base64.h" // for image decoding
-#include "LogInfo.h"
+//#include "LogInfo.h"
 
 namespace ISXHttpClient 
 {
-	HttpClient::HttpClient() : base_url(L"http://192.168.195.180"), client(base_url), 
-		user_name(L""), user_password(L"")
-	{
-	}
-
-	HttpClient::HttpClient(utility::string_t user_name, utility::string_t user_password) : user_name(user_name), user_password(user_password),
-		base_url(L"http://192.168.195.180"), client(base_url)
-	{
-	}
+	HttpClient::HttpClient() : token(L""), domen(L""), base_url(L"http://192.168.195.180"), client(base_url)
+	{		
+	}	
 
 	HttpClient::HttpClient(HttpClient&& rhs) : base_url(rhs.base_url), client(rhs.client)
 	{
@@ -44,9 +39,12 @@ namespace ISXHttpClient
 	pplx::task<void> HttpClient::request_files_upload(char* buffer, size_t lenght, utility::string_t filename)
 	{		
 		std::string encoded_str = base64_encode(reinterpret_cast<const unsigned char*>(buffer), lenght);
-		std::wstring wstr_encoded(encoded_str.begin(), encoded_str.end());		
-
-		std::wstring body = L"/webservice/rest/server.php?&wstoken=859b2244c55636be03408c2b0e208b03&wsfunction=core_files_upload&contextid=0&component=user&filearea=draft&itemid=0&filepath=/&filename=";
+		std::wstring wstr_encoded(encoded_str.begin(), encoded_str.end());
+				
+		std::wstring body = L"/webservice/rest/server.php?&wstoken=";
+			
+		body.append(token);		
+		body.append(L"&wsfunction=core_files_upload&contextid=0&component=user&filearea=draft&itemid=0&filepath=/&filename=");
 			
 		body.append(filename);
 		body.append(L"&filecontent=");
@@ -58,7 +56,7 @@ namespace ISXHttpClient
 		{	
 			if (response.status_code() == status_codes::OK)
 			{
-				tlf_i << AT << "Server returned status code 200";
+				//tlf_i << AT << "Server returned status code 200";
 			}			
 			
 			// output on a consol
@@ -79,8 +77,50 @@ namespace ISXHttpClient
 
 				std::wcout << wstr << std::endl;				
 
-				tlf_i << AT << "Received responce";
+				//tlf_i << AT << "Received responce";
 			});
 		});	
+	}
+
+	bool HttpClient::openConfigFile(std::string fileName)
+	{
+		std::ifstream in_file(fileName);
+
+		if (!in_file.is_open())
+		{
+			std::wcout << "Config file is not opened" << std::endl;
+			in_file.close();
+			return false;
+		}
+
+		else
+		{
+			std::string line;
+
+			while (std::getline(in_file, line))
+			{
+				if (line.find("#TOKEN") != std::string::npos)
+				{
+					line.erase(line.cbegin(), line.cbegin() + 7);
+					std::wstring temp(line.cbegin(), line.cend());
+					
+					token.assign(temp);
+
+					std::wcout << token << std::endl;
+				}
+
+				if (line.find("#DOMEN") != std::string::npos)
+				{
+					line.erase(line.cbegin(), line.cbegin() + 7);
+					std::wstring temp(line.cbegin(), line.cend());
+
+					domen.assign(temp);
+
+					std::wcout << domen << std::endl;
+				}
+			}
+		}
+
+		return true;
 	}
 }
