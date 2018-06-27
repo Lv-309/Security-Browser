@@ -41,6 +41,12 @@ namespace ISXHttpClient
 		std::string encoded_str = base64_encode(reinterpret_cast<const unsigned char*>(buffer), lenght);
 		std::wstring wstr_encoded(encoded_str.begin(), encoded_str.end());
 				
+		if (!domen.empty())
+		{
+			http_client new_client(domen);
+			client = std::move(new_client);
+		}
+
 		std::wstring body = L"/webservice/rest/server.php?&wstoken=";
 			
 		body.append(token);		

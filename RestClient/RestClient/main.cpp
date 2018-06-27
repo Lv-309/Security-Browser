@@ -18,7 +18,7 @@ int wmain()
 	char* buffer = nullptr;
 	size_t size = 0;
 
-	const char file_path[] = "image2.jpg";
+	const char file_path[] = "test.txt";
 
 	std::ifstream is(file_path);
 
@@ -40,8 +40,7 @@ int wmain()
 	RestClient client(&subj);	
 
 	client.SetConfigFile("config.txt");
-
-	subj.setBufferData(buffer, size, L"image2.jpg");
+	subj.setBufferData(buffer, size, L"test.txt");
 
 	std::wcout << "Enter any key to continue..." << std::endl;
 	std::cin.get();
