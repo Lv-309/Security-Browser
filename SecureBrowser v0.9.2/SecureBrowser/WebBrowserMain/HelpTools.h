@@ -17,3 +17,4 @@
 #define FONT_LOGO	13
 #define VK_KEY_C 0x43
 #define IS_PRESSED 0x8000
+#define WM_ON_IDWINDOW_CLOSED WM_USER+100

@@ -16,13 +16,13 @@ int APIENTRY _tWinMain(_In_		HINSTANCE h_instance,
 {
 	int n_args;
 	LPWSTR* sz_args_list = CommandLineToArgvW(GetCommandLineW(), &n_args);
-	if (n_args == 1)
+	/*if (n_args == 1)
 	{
 		tlf_f << AT << "No inbound link";
 		FAILURE_BOX("No inbound link");
 		return EXIT_SUCCESS;
 	}
-	else if (n_args > 2)
+	else*/ if (n_args > 2)
 	{
 		tlf_f << AT << "Too many input parameters";
 		FAILURE_BOX("Too many input parameters");

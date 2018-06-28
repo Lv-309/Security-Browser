@@ -1,8 +1,11 @@
 #include "stdafx.h"
 
 #include "IdWindow.h"
+#include "../RestClient/Subject.h"
+#include "../RestClient/RestClient.h"
 #include"../TraceUtility/LogInfo.h"
 #include"../TraceUtility/LogWarning.h"
+#include "HelpTools.h"
 
 #define WINDOW_NAME					TEXT("ID")
 #define WINDOW_CLASS_NAME			TEXT("ID window")
@@ -43,7 +46,7 @@ namespace ISXIdWindow
 		INT hight = 700;
 		INT x = (GetSystemMetrics(SM_CXSCREEN) / 2) - (width / 2);
 		INT y = (GetSystemMetrics(SM_CYSCREEN) / 2) - (hight / 2);
-
+		m_hwnd_parent = hParent;
 		return CreateWindowEx(0, WINDOW_CLASS_NAME, WINDOW_NAME,
 			NULL, x, y, width, hight,
 			hParent, NULL, m_hinstance, this);
@@ -172,6 +175,7 @@ namespace ISXIdWindow
 			MessageBox(NULL, L"Can't find any camera\nPlease, plug in camera", L"Warning",
 				MB_OK | MB_ICONWARNING | MB_DEFAULT_DESKTOP_ONLY);
 
+		m_current_num_of_cameras = m_camera_handler.GetNumOfAvailableCameras();
 		std::vector<std::string> cameras = m_camera_handler.GetNamesOfAvailableCameras();
 
 
@@ -189,15 +193,27 @@ namespace ISXIdWindow
 			EnableWindow(m_hwnd_list_of_cameras, TRUE);
 	}
 
+	void  IdWindow::SendToMoodle()
+	{
+		std::vector<unsigned char> buffer;
+		cv::imencode(".jpg", m_frame, buffer);
+
+		Subject subj;
+		RestClient client(&subj);
+
+		//subj.setBufferData((char*)buffer.data(), buffer.size(), L"ID.jpg");
+
+		//TO DO display msg "Your photo is being saved, wait a few seconds."
+	}
+
 	LRESULT CALLBACK IdWindow::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LPARAM l_param)
 	{
 		HWND parent_window;
-
 		switch (u_msg)
 		{
 		case WM_CREATE:
-			parent_window = FindWindow(TEXT("WebBrowserWindow"), NULL);
-			EnableWindow(parent_window, FALSE);
+			//parent_window = FindWindow(TEXT("WebBrowserWindow"), NULL);
+			//EnableWindow(parent_window, FALSE);
 
 			RECT rect;
 
@@ -218,7 +234,7 @@ namespace ISXIdWindow
 
 			m_hwnd_text_choose_camera = CreateWindowEx(0, TEXT("STATIC"), TEXT("Choose camera:"),
 				WS_CHILD | WS_VISIBLE,
-				rect.right - 335, rect.bottom - 75, 135, 25,
+				rect.right - 315, rect.bottom - 75, 115, 25,
 				hwnd, NULL, m_hinstance, NULL);
 
 			AddCameraItems();
@@ -248,10 +264,10 @@ namespace ISXIdWindow
 				UpdateWindow(m_hwnd_list_of_cameras);
 				UpdateWindow(m_hwnd_text_choose_camera);
 			}
-
+			INT cam = m_camera_handler.GetNumOfAvailableCameras();
 			if (m_camera_handler.GetNumOfAvailableCameras() != m_current_num_of_cameras)
 			{
-				m_current_num_of_cameras = m_camera_handler.GetNumOfAvailableCameras();
+				/*m_current_num_of_cameras = m_camera_handler.GetNumOfAvailableCameras();*/
 				SendMessage(m_hwnd_list_of_cameras, CB_RESETCONTENT, (WPARAM)0, (LPARAM)0);
 				AddCameraItems();
 				m_camera.open((INT)SendMessage((HWND)l_param, (UINT)CB_GETCURSEL,
@@ -298,6 +314,14 @@ namespace ISXIdWindow
 			case BUTTON_SUBMIT:
 				cv::imwrite("..//Photos//ID.jpg", m_frame);
 				tlf_i << AT << "Student has submited his ID photo";
+
+				SendToMoodle();
+
+				tlf_i << AT << "User start test passing";
+
+				//parent_window = FindWindow(TEXT("WebBrowserWindow"), NULL);
+				//PostMessage(parent_window, WM_ON_IDWINDOW_CLOSED, NULL, NULL);
+				PostMessage(m_hwnd_parent, WM_ON_IDWINDOW_CLOSED, NULL, NULL);
 				PostMessage(hwnd, WM_CLOSE, NULL, NULL);
 				break;
 			}

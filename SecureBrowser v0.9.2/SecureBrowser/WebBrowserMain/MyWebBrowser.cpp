@@ -26,6 +26,7 @@ MyWebBrowser::MyWebBrowser(HINSTANCE h_instance, LPCTSTR lpsz_link)
 	, m_lpsz_link(lpsz_link)
 	, m_cc_wnd(this->m_hinstance)
 	, id(this->m_hinstance)
+	, fd(0 /*camera number*/) 
 { 
 	
 }
@@ -130,12 +131,12 @@ ErrorTypes MyWebBrowser::Verify() const noexcept
 
 MyWebBrowser* MyWebBrowser::CreateSafe(HINSTANCE h_instance, LPCTSTR lpsz_link)
 {
-	// Verify link on validity
-	VerifyLink		check_link(lpsz_link);
-	if (check_link.Verify() != ErrorTypes::IS_OK)
-		return nullptr;
-	// Verify session on remote or virtual access
-	HandleSession	handle_session;
+	//// Verify link on validity
+	//VerifyLink		check_link(lpsz_link);
+	//if (check_link.Verify() != ErrorTypes::IS_OK)
+	//	return nullptr;
+	//// Verify session on remote or virtual access
+	//HandleSession	handle_session;
 		//if (handle_session.Verify() != ErrorTypes::IS_OK)
 		//	return nullptr;
 	// If is ok, return object
@@ -166,10 +167,10 @@ ErrorTypes MyWebBrowser::Authentication(HWND hwnd, const RECT& rc_client) noexce
 	return ErrorTypes::IS_OK;
 }
 
-void MyWebBrowser::IdCreation()
+void MyWebBrowser::IdCreation(HWND hparent)
 {
 	HWND parent = FindWindow(TEXT("WebBrowserWindow"), NULL);
-	this->id.CreateIdWindow(parent);
+	this->id.CreateIdWindow(hparent);
 }
 
 ErrorTypes MyWebBrowser::TestPassing(HWND hwnd, const RECT& rc_client) noexcept
@@ -177,15 +178,12 @@ ErrorTypes MyWebBrowser::TestPassing(HWND hwnd, const RECT& rc_client) noexcept
 	// Create window of our web browser
 	// in client side case
 	sm_lpwb_wnd = this->m_lpwb_wnd = new WebBrowserWindow(hwnd);
-	RECT rc = { 0, 45, rc_client.right, rc_client.bottom };;
+	RECT rc = { 0, 45, rc_client.right, rc_client.bottom };
 	this->m_lpwb_wnd->SetRect(rc);
 	this->m_lpwb_wnd->Navigate(m_lpsz_link);
 
-	/*ISXFaceDetector::FaceDetector fd(0);
-	std::thread t(std::bind(&ISXFaceDetector::FaceDetector::Run, &fd, 1, 25, 1));
-	t.join();*/
-
-	tlf_i << AT << "User start test passing";
+	//start thread for face detector
+	t = std::thread(&ISXFaceDetector::FaceDetector::SaveConstantly, &fd);
 
 
 	return ErrorTypes::IS_OK;
@@ -193,11 +191,12 @@ ErrorTypes MyWebBrowser::TestPassing(HWND hwnd, const RECT& rc_client) noexcept
 
 LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LPARAM l_param)
 {
-	RECT		rc_client;
+	
 	RECT		rc_logo = { 10, 13, 200, 20 }, rc_edit, rc_go;
 	LONG		style;
 	DWORD		ctrl_id;
 	INT			status;
+	RECT		m_rc_client;
 	switch (u_msg)
 	{
 	// Create window
@@ -206,24 +205,24 @@ LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LP
 	case WM_CREATE:
 		// Set window params
 		InitDialog();
-		SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, NULL);
+		SetWindowPos(hwnd, HWND_TOP, 0, 0, 0, 0, NULL);
 		style = GetWindowLong(hwnd, GWL_STYLE);
 		style &= ~WS_MAXIMIZEBOX;
 		style &= ~WS_MINIMIZEBOX;
 		style &= ~WS_THICKFRAME;
 		SetWindowLongPtr(hwnd, GWL_STYLE, style);
 		ShowWindow(hwnd, SHOW_FULLSCREEN);
-
-		GetClientRect(hwnd, &rc_client);
 	//ID
-		IdCreation();
+		this->id.Create();
+		IdCreation(hwnd);
 	// Create controls
+		GetClientRect(hwnd, &m_rc_client);
 		HWND label_handle;
 		label_handle = this->CreateLabel(TEXT("Secure Browser"), rc_logo, hwnd);
 		this->SetFont(label_handle, TEXT("Verdana"), 13, FW_MEDIUM);
-		rc_go   = { rc_client.right - 90, 12, 75, 25 };
+		rc_go   = { m_rc_client.right - 90, 12, 75, 25 };
 		this->CreateButton(TEXT("Go"), rc_go, hwnd);
-		rc_edit = { 150, 12, rc_client.right - 250, 25 };
+		rc_edit = { 150, 12, m_rc_client.right - 250, 25 };
 		this->m_hwnd_address_bar = this->CreateEditBox(TEXT(""), rc_edit, hwnd);
 		this->SetFont(this->m_hwnd_address_bar, TEXT("Verdana"), 11, FW_LIGHT);
 
@@ -231,9 +230,13 @@ LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LP
 
 		//if (this->Authentication(hwnd, rc_client) != ErrorTypes::IS_OK)
 		//	PostMessage(hwnd, WM_CLOSE, NULL, NULL); // TODO: do right exit
-
-		this->TestPassing(hwnd, rc_client);
+		//this->TestPassing(hwnd, m_rc_client);
+		 //in IdCreator
 		return 0;
+	//case WM_ON_IDWINDOW_CLOSED:
+	//	GetClientRect(hwnd, &m_rc_client);
+	//	this->TestPassing(hwnd, m_rc_client);
+	//	return 0;
 	case WM_COMMAND:
 		if (LOWORD(w_param) == (INT)WndControls::ID_GO_BTN)
 		{
@@ -250,20 +253,15 @@ LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LP
 			SetTextColor((HDC)w_param, RGB(100, 100, 215));
 			return (INT_PTR)CreateSolidBrush(LIGHT_BLUE);
 		}
-		/*if (ctrl_id == (INT)WndControls::ID_EDIT_BOX)
-		{
-			SetTextColor((HDC)w_param, RGB(100, 100, 215));
-			return (INT_PTR)CreateSolidBrush(LIGHT_BLUE);
-		}*/
 		
 		return 0;
 	// Prevent move wnd
-	/*case WM_SYSCOMMAND:
-		status = (INT)w_param & 0xfff0;
-		if (status == SC_MOVE)
-			return 0;
-		else if (status == SC_CLOSE)
-			return DefWindowProc(hwnd, u_msg, w_param, l_param);*/
+	//case WM_SYSCOMMAND:
+	//	status = (INT)w_param & 0xfff0;
+	//	if (status == SC_MOVE)
+	//		return 0;
+	//	else if (status == SC_CLOSE)
+	//		return DefWindowProc(hwnd, u_msg, w_param, l_param);
 	case WM_CLOSE:
 		EnableWindow(hwnd, FALSE);
 		if (WARNING_BOX("You really want to close browser?") == IDNO)
@@ -272,6 +270,14 @@ LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LP
 			SetFocus(hwnd);
 			return 0;
 		}
+		fd.StopFaceDetector();
+		WARNING_BOX("Face detector was stopped");
+		//Sleep(5000);
+		if (t.joinable())
+			t.join();
+		else std::cout << "Thread not joinable." << std::endl;
+		WARNING_BOX("End");
+
 		return DestroyWindow(hwnd);
 	case WM_DESTROY:
 		

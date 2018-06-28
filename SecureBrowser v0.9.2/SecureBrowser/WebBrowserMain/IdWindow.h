@@ -19,6 +19,7 @@ namespace ISXIdWindow
 		HWND CreateIdWindow(HWND hParent);
 
 		void AddCameraItems();
+		void SendToMoodle();
 
 	private:
 
@@ -28,6 +29,7 @@ namespace ISXIdWindow
 		LRESULT CALLBACK WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LPARAM l_param) override;
 		static void CvMatToWinControl(const cv::Mat& img, HWND WinCtrl);
 
+		HWND							m_hwnd_parent;
 		HWND							m_hwnd_submit_button;
 		HWND							m_hwnd_take_photo_button;
 		HWND							m_hwnd_retake_photo_button;

@@ -11,7 +11,7 @@ namespace ISXVerifyLink
 	{
 	// Ctors
 	public:
-		 VerifyLink(LPCTSTR lpsz_link);
+		 VerifyLink(LPCTSTR lpsz_link = L"https://softserve.academy/");
 		~VerifyLink() = default;
 	// Controls
 	public:
@@ -21,9 +21,9 @@ namespace ISXVerifyLink
 		ErrorTypes Verify() const noexcept;
 	// Protocol = https, domain = softserve.academy
 	private:
-		wstring m_domain;
-		wstring m_protocol;
-		wstring m_getted_url;
+		wstring m_domain = L"softserve.academy";
+		wstring m_protocol = L"https";
+		wstring m_getted_url = L"https://softserve.academy/";
 	};
 
 }

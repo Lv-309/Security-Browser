@@ -4,6 +4,8 @@
 #include "HandleMonitors.h"
 #include "WebBrowserWindow.h"
 #include "ChooseCameraWindow.h"
+#include "..\WebCamera\Frame.h"
+#include "..\WebCamera\FaceDetector.h"
 #include "IdWindow.h"
 
 using ISXMyWindow::MyWindow;
@@ -51,8 +53,8 @@ namespace ISXMyWebBrowser
 		ErrorTypes TestPassing(HWND hwnd, const RECT& rc_client)    noexcept;
 		ErrorTypes Authentication(HWND hwnd, const RECT& rc_client) noexcept;
 	// Create controls
-	private:
-		void IdCreation();
+	private: 
+		void IdCreation(HWND hparent);
 		HWND CreateLabel(LPCTSTR lpsz_text, const RECT& rc, HWND hwnd)  const noexcept;
 		HWND CreateButton(LPCTSTR lpsz_name, const RECT& rc, HWND hwnd) const noexcept;
 		HWND CreateButton(LPCTSTR lpsz_name, HWND hwnd, const RECT& rc, HMENU menu) const noexcept;
@@ -63,6 +65,9 @@ namespace ISXMyWebBrowser
 		static LRESULT FAR PASCAL GetMsgHookProc(int nCode, WPARAM wParam, LPARAM lParam);
 	// Private fields
 	private:
+		//RECT								m_rc_client;
+		ISXFaceDetector::FaceDetector		fd;
+		std::thread							t;
 		HWND								m_hwnd_address_bar = nullptr;
 		LPCTSTR								m_lpsz_link;
 		// Our classes
@@ -71,7 +76,7 @@ namespace ISXMyWebBrowser
 		CComPtr<WebBrowserWindow>			m_lpwb_wnd;
 		static HHOOK						sm_msg_hook;
 		static CComPtr<WebBrowserWindow>	sm_lpwb_wnd;
-		ISXIdWindow::IdWindow id;
+		ISXIdWindow::IdWindow				id;
 	};
 
 }
