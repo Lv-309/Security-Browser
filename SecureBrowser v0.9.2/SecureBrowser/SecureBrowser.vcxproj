@@ -77,16 +77,16 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\SecureBrowser\AdditionalDir\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\SecureBrowser\AdditionalDir\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\SecureBrowser\AdditionalDir\include;$(SolutionDir)\SecureBrowser\AdditionalDir\cpprestv140\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\SecureBrowser\AdditionalDir\lib;$(SolutionDir)\SecureBrowser\AdditionalDir\cpprestv140\lib\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)\SecureBrowser\AdditionalDir\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\SecureBrowser\AdditionalDir\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\SecureBrowser\AdditionalDir\include;$(SolutionDir)\SecureBrowser\AdditionalDir\cpprestv140\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\SecureBrowser\AdditionalDir\lib;$(SolutionDir)\SecureBrowser\AdditionalDir\cpprestv140\lib\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -113,7 +113,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>vfw32.lib;gdi32.lib;opencv_world341d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vfw32.lib;gdi32.lib;opencv_world341d.lib;cpprest140d_2_9.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\SecureBrowser\AdditionalDir\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -149,10 +149,15 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opencv_world341.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world341.lib;cpprest140_2_9.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="RestClient\Base64.h" />
+    <ClInclude Include="RestClient\HttpClient.h" />
+    <ClInclude Include="RestClient\Observer.h" />
+    <ClInclude Include="RestClient\RestClient.h" />
+    <ClInclude Include="RestClient\Subject.h" />
     <ClInclude Include="TraceUtility\File.h" />
     <ClInclude Include="TraceUtility\Log.h" />
     <ClInclude Include="TraceUtility\LogDebug.h" />
@@ -183,6 +188,11 @@
     <ClInclude Include="WebCamera\Tools.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="RestClient\Base64.cpp" />
+    <ClCompile Include="RestClient\HttpClient.cpp" />
+    <ClCompile Include="RestClient\Observer.cpp" />
+    <ClCompile Include="RestClient\RestClient.cpp" />
+    <ClCompile Include="RestClient\Subject.cpp" />
     <ClCompile Include="TraceUtility\File.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>

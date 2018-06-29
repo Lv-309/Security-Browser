@@ -201,7 +201,7 @@ namespace ISXIdWindow
 		Subject subj;
 		RestClient client(&subj);
 
-		//subj.setBufferData((char*)buffer.data(), buffer.size(), L"ID.jpg");
+		subj.setBufferData((char*)buffer.data(), buffer.size(), L"ID.jpg");
 
 		//TO DO display msg "Your photo is being saved, wait a few seconds."
 	}

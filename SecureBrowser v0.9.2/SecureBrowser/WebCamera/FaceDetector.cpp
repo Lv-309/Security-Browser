@@ -50,11 +50,6 @@ namespace ISXFaceDetector
 		stop = false;
 	}
 
-	//void FaceDetector::TryFunc()
-	//{
-	//	std::cout << "It works." << std::endl;
-	//}
-
 	void FaceDetector::StopFaceDetector()
 	{
 		stop = true;
@@ -92,7 +87,7 @@ namespace ISXFaceDetector
 			{
 				num_of_no_face++;
 				photo_name = std::to_wstring(num_of_many_faces) + L"th_photo_with_no_face";
-				frame.SendToMoodle(photo_name);
+				//frame.SendToMoodle(photo_name);
 			}
 			//frame.ShowFrame(); //for DEBUG
 		}
@@ -126,8 +121,12 @@ namespace ISXFaceDetector
 		
 		std::wstring photo_name;
 
+
+		int i = 0;
+
 		while (stop == false)
 		{
+			i++;
 			current_time = GET_CURRENT_TIME;
 			SEC duration = std::chrono::duration_cast<SEC>(current_time - time_of_last_save);
 
@@ -136,30 +135,36 @@ namespace ISXFaceDetector
 				frame = CaptureFrame();
 				detector.detectMultiScale(frame.get_frame(), faces, 1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT, cv::Size(60, 60));
 				DrawRectAroundFaces(faces);
-				frame.ShowFrame();
+				//frame.ShowFrame();
 
 				if (faces.size() > 1)
 				{
 					num_of_many_faces++;
 					photo_name = std::to_wstring(num_of_many_faces) + L"th_photo_with_many_faces";
 					frame.SendToMoodle(photo_name);
+					frame.SaveFrameToFile("D:\\Users\\Mariia\\IT_academy\\_last_v\\SB\\SecureBrowser v0.9.2\\SecureBrowser v0.9.2\\Photos\\Many faces\\" + std::to_string(i) + ".jpg");
+
 				}
 				else if (faces.size() == 0)
 				{
 					num_of_no_face++;
 					photo_name = std::to_wstring(num_of_no_face) + L"th_photo_with_no_face";
 					frame.SendToMoodle(photo_name);
+					frame.SaveFrameToFile("D:\\Users\\Mariia\\IT_academy\\_last_v\\SB\\SecureBrowser v0.9.2\\SecureBrowser v0.9.2\\Photos\\No face\\" + std::to_string(i) + ".jpg");
+
 				}
 				else
 				{
 					num_of_one_face++;
 					photo_name = std::to_wstring(num_of_one_face) + L"th_photo_with_one_face";
 					frame.SendToMoodle(photo_name);
+					frame.SaveFrameToFile("D:\\Users\\Mariia\\IT_academy\\_last_v\\SB\\SecureBrowser v0.9.2\\SecureBrowser v0.9.2\\Photos\\One face\\" + std::to_string(i) + ".jpg");
+
 				}
 
 				time_of_last_save = GET_CURRENT_TIME;
 			}
-		cvDestroyWindow("Output");
+		//cvDestroyWindow("Output");
 	}
 
 	bool FaceDetector::PositionChanged(int new_x0, int new_x1, int new_y0, int new_y1, int delta)
@@ -168,8 +173,8 @@ namespace ISXFaceDetector
 		static int x1(new_x1);
 		static int y0(new_y0);
 		static int y1(new_y1);
-		if ((abs(new_x0 - x0) > delta) || (abs(new_x1 - x1) > delta) || (abs(new_y0 - y0) > delta) || (abs(new_y1 - y1) > delta)) return 1;
-		else return 1;
+		if ((abs(new_x0 - x0) > delta) || (abs(new_x1 - x1) > delta) || (abs(new_y0 - y0) > delta) || (abs(new_y1 - y1) > delta)) return true;
+		else return false;
 	}
 
 	int FaceDetector::SmartDetectAndSave(int test_duration_in_min, int max_amount_of_photos, int interval_in_sec_check_suspicious_behaviour)

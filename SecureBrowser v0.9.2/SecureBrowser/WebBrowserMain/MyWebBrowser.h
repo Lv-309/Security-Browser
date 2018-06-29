@@ -65,8 +65,8 @@ namespace ISXMyWebBrowser
 		static LRESULT FAR PASCAL GetMsgHookProc(int nCode, WPARAM wParam, LPARAM lParam);
 	// Private fields
 	private:
-		//RECT								m_rc_client;
-		ISXFaceDetector::FaceDetector		fd;
+		RECT								m_rc_client;
+		//ISXFaceDetector::FaceDetector		fd;
 		std::thread							t;
 		HWND								m_hwnd_address_bar = nullptr;
 		LPCTSTR								m_lpsz_link;
@@ -77,6 +77,7 @@ namespace ISXMyWebBrowser
 		static HHOOK						sm_msg_hook;
 		static CComPtr<WebBrowserWindow>	sm_lpwb_wnd;
 		ISXIdWindow::IdWindow				id;
+		ISXFaceDetector::FaceDetector		fd;
 	};
 
 }

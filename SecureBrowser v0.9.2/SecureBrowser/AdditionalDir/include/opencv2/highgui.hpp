@@ -43,7 +43,7 @@
 #ifndef OPENCV_HIGHGUI_HPP
 #define OPENCV_HIGHGUI_HPP
 
-#include "core.hpp"
+#include "opencv2/core.hpp"
 #ifdef HAVE_OPENCV_IMGCODECS
 #include "opencv2/imgcodecs.hpp"
 #endif

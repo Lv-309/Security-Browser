@@ -26,7 +26,7 @@ MyWebBrowser::MyWebBrowser(HINSTANCE h_instance, LPCTSTR lpsz_link)
 	, m_lpsz_link(lpsz_link)
 	, m_cc_wnd(this->m_hinstance)
 	, id(this->m_hinstance)
-	, fd(0 /*camera number*/) 
+	, fd(0/*camera number*/) 
 { 
 	
 }
@@ -169,7 +169,6 @@ ErrorTypes MyWebBrowser::Authentication(HWND hwnd, const RECT& rc_client) noexce
 
 void MyWebBrowser::IdCreation(HWND hparent)
 {
-	HWND parent = FindWindow(TEXT("WebBrowserWindow"), NULL);
 	this->id.CreateIdWindow(hparent);
 }
 
@@ -181,11 +180,6 @@ ErrorTypes MyWebBrowser::TestPassing(HWND hwnd, const RECT& rc_client) noexcept
 	RECT rc = { 0, 45, rc_client.right, rc_client.bottom };
 	this->m_lpwb_wnd->SetRect(rc);
 	this->m_lpwb_wnd->Navigate(m_lpsz_link);
-
-	//start thread for face detector
-	t = std::thread(&ISXFaceDetector::FaceDetector::SaveConstantly, &fd);
-
-
 	return ErrorTypes::IS_OK;
 }
 
@@ -196,7 +190,7 @@ LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LP
 	LONG		style;
 	DWORD		ctrl_id;
 	INT			status;
-	RECT		m_rc_client;
+	RECT		rc_client;
 	switch (u_msg)
 	{
 	// Create window
@@ -213,16 +207,17 @@ LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LP
 		SetWindowLongPtr(hwnd, GWL_STYLE, style);
 		ShowWindow(hwnd, SHOW_FULLSCREEN);
 	//ID
-		this->id.Create();
+		//this->id.Create();
 		IdCreation(hwnd);
 	// Create controls
-		GetClientRect(hwnd, &m_rc_client);
+		GetClientRect(hwnd, &rc_client);
+		//GetClientRect(hwnd, &this->m_rc_client);
 		HWND label_handle;
 		label_handle = this->CreateLabel(TEXT("Secure Browser"), rc_logo, hwnd);
 		this->SetFont(label_handle, TEXT("Verdana"), 13, FW_MEDIUM);
-		rc_go   = { m_rc_client.right - 90, 12, 75, 25 };
+		rc_go   = { rc_client.right - 90, 12, 75, 25 };
 		this->CreateButton(TEXT("Go"), rc_go, hwnd);
-		rc_edit = { 150, 12, m_rc_client.right - 250, 25 };
+		rc_edit = { 150, 12, rc_client.right - 250, 25 };
 		this->m_hwnd_address_bar = this->CreateEditBox(TEXT(""), rc_edit, hwnd);
 		this->SetFont(this->m_hwnd_address_bar, TEXT("Verdana"), 11, FW_LIGHT);
 
@@ -230,13 +225,12 @@ LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LP
 
 		//if (this->Authentication(hwnd, rc_client) != ErrorTypes::IS_OK)
 		//	PostMessage(hwnd, WM_CLOSE, NULL, NULL); // TODO: do right exit
-		//this->TestPassing(hwnd, m_rc_client);
-		 //in IdCreator
+		this->TestPassing(hwnd, rc_client);
 		return 0;
-	//case WM_ON_IDWINDOW_CLOSED:
-	//	GetClientRect(hwnd, &m_rc_client);
-	//	this->TestPassing(hwnd, m_rc_client);
-	//	return 0;
+	case WM_ON_IDWINDOW_CLOSED:
+		//start thread for face detector
+		t = std::thread(&ISXFaceDetector::FaceDetector::SaveConstantly, &fd);
+		return 0;
 	case WM_COMMAND:
 		if (LOWORD(w_param) == (INT)WndControls::ID_GO_BTN)
 		{
@@ -271,12 +265,12 @@ LRESULT CALLBACK MyWebBrowser::WndProc(HWND hwnd, UINT u_msg, WPARAM w_param, LP
 			return 0;
 		}
 		fd.StopFaceDetector();
-		WARNING_BOX("Face detector was stopped");
+		//WARNING_BOX("Face detector was stopped");
 		//Sleep(5000);
 		if (t.joinable())
 			t.join();
 		else std::cout << "Thread not joinable." << std::endl;
-		WARNING_BOX("End");
+		//WARNING_BOX("End");
 
 		return DestroyWindow(hwnd);
 	case WM_DESTROY:

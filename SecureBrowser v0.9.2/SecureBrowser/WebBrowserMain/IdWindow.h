@@ -14,7 +14,10 @@ namespace ISXIdWindow
 	public:
 
 		IdWindow(HINSTANCE hInstance);
-		~IdWindow() {};
+		~IdWindow()
+		{
+			m_camera.release();
+		};
 
 		HWND CreateIdWindow(HWND hParent);
 

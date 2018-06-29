@@ -20,7 +20,10 @@ namespace ISXFaceDetector
 	{
 	public:
 		FaceDetector(int num_of_chosen_camera = 0); // add algorithm, path for saving
-		~FaceDetector() {};
+		~FaceDetector()
+		{
+			camera.release();
+		};
 
 		ISXFrame::Frame CaptureFrame();
 

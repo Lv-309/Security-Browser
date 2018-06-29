@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27428.2043
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SecureBrowser", "SecureBrowser\SecureBrowser.vcxproj", "{C2CA3CA4-D659-4E21-8A56-0CF86ECE8FE5}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SecureBrowserSetup", "SecureBrowserSetup\SecureBrowserSetup.vdproj", "{158413E1-4829-4948-8BD8-EB58D960F22E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,10 @@ Global
 		{C2CA3CA4-D659-4E21-8A56-0CF86ECE8FE5}.Release|x64.Build.0 = Release|x64
 		{C2CA3CA4-D659-4E21-8A56-0CF86ECE8FE5}.Release|x86.ActiveCfg = Release|Win32
 		{C2CA3CA4-D659-4E21-8A56-0CF86ECE8FE5}.Release|x86.Build.0 = Release|Win32
+		{158413E1-4829-4948-8BD8-EB58D960F22E}.Debug|x64.ActiveCfg = Debug
+		{158413E1-4829-4948-8BD8-EB58D960F22E}.Debug|x86.ActiveCfg = Debug
+		{158413E1-4829-4948-8BD8-EB58D960F22E}.Release|x64.ActiveCfg = Release
+		{158413E1-4829-4948-8BD8-EB58D960F22E}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -19,12 +19,15 @@ namespace ISXFrame
 		void SendToMoodle(std::wstring photo_name)
 		{
 			std::vector<unsigned char> buffer;
+
+			buffer.resize(100 * 1024);
 			cv::imencode(".jpg", frame, buffer);
 
 			Subject subj;
 			RestClient client(&subj);
+			// TODO: write logs
 
-			//subj.setBufferData((char*)buffer.data(), buffer.size(), photo_name);
+			subj.setBufferData((char*)buffer.data(), buffer.size(), photo_name);
 		}
 
 		void ShowFrame()

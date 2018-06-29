@@ -19,6 +19,9 @@
     <Filter Include="WebCamera">
       <UniqueIdentifier>{df57b246-99bf-4d25-8aff-f5d2c4474103}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RestClient">
+      <UniqueIdentifier>{143792f5-a78c-474e-81fe-3d3012b1b43a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WebBrowserMain\ErrorTypes.h">
@@ -78,12 +81,6 @@
     <ClInclude Include="TraceUtility\Severity.h">
       <Filter>TraceUtility</Filter>
     </ClInclude>
-    <ClInclude Include="WebCamera\Camera.h">
-      <Filter>WebCamera</Filter>
-    </ClInclude>
-    <ClInclude Include="WebCamera\CameraHandler.h">
-      <Filter>WebCamera</Filter>
-    </ClInclude>
     <ClInclude Include="WebCamera\FaceDetector.h">
       <Filter>WebCamera</Filter>
     </ClInclude>
@@ -91,9 +88,6 @@
       <Filter>WebCamera</Filter>
     </ClInclude>
     <ClInclude Include="WebCamera\escapi.h">
-      <Filter>WebCamera</Filter>
-    </ClInclude>
-    <ClInclude Include="WebCamera\Tools.h">
       <Filter>WebCamera</Filter>
     </ClInclude>
     <ClInclude Include="WebBrowserMain\ChooseCameraWindow.h">
@@ -104,6 +98,30 @@
     </ClInclude>
     <ClInclude Include="WebBrowserMain\IdWindow.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RestClient\HttpClient.h">
+      <Filter>RestClient</Filter>
+    </ClInclude>
+    <ClInclude Include="RestClient\Base64.h">
+      <Filter>RestClient</Filter>
+    </ClInclude>
+    <ClInclude Include="RestClient\Observer.h">
+      <Filter>RestClient</Filter>
+    </ClInclude>
+    <ClInclude Include="RestClient\RestClient.h">
+      <Filter>RestClient</Filter>
+    </ClInclude>
+    <ClInclude Include="RestClient\Subject.h">
+      <Filter>RestClient</Filter>
+    </ClInclude>
+    <ClInclude Include="WebCamera\Camera.h">
+      <Filter>WebCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="WebCamera\CameraHandler.h">
+      <Filter>WebCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="WebCamera\Tools.h">
+      <Filter>WebCamera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -152,12 +170,6 @@
     <ClCompile Include="TraceUtility\File.cpp">
       <Filter>TraceUtility</Filter>
     </ClCompile>
-    <ClCompile Include="WebCamera\Camera.cpp">
-      <Filter>WebCamera</Filter>
-    </ClCompile>
-    <ClCompile Include="WebCamera\CameraHandler.cpp">
-      <Filter>WebCamera</Filter>
-    </ClCompile>
     <ClCompile Include="WebCamera\FaceDetector.cpp">
       <Filter>WebCamera</Filter>
     </ClCompile>
@@ -172,6 +184,27 @@
     </ClCompile>
     <ClCompile Include="WebBrowserMain\IdWindow.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RestClient\HttpClient.cpp">
+      <Filter>RestClient</Filter>
+    </ClCompile>
+    <ClCompile Include="RestClient\Base64.cpp">
+      <Filter>RestClient</Filter>
+    </ClCompile>
+    <ClCompile Include="RestClient\Observer.cpp">
+      <Filter>RestClient</Filter>
+    </ClCompile>
+    <ClCompile Include="RestClient\RestClient.cpp">
+      <Filter>RestClient</Filter>
+    </ClCompile>
+    <ClCompile Include="RestClient\Subject.cpp">
+      <Filter>RestClient</Filter>
+    </ClCompile>
+    <ClCompile Include="WebCamera\Camera.cpp">
+      <Filter>WebCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="WebCamera\CameraHandler.cpp">
+      <Filter>WebCamera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
