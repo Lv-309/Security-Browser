@@ -23,6 +23,11 @@
 			requestTask.wait();
 		}
 
+		catch (const std::invalid_argument &e)
+		{
+			std::wcout << e.what() << std::endl;
+		}
+
 		catch (const std::exception &e)
 		{
 			std::wcout << "Error exception: " << e.what() << std::endl;
