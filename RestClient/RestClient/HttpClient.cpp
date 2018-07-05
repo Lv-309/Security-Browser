@@ -1,7 +1,6 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include <exception>
 
 #include "HttpClient.h"
 #include "Base64.h" // for image decoding
@@ -49,7 +48,6 @@ namespace ISXHttpClient
 			{
 				throw std::invalid_argument("Empty buffer");
 			});
-			
 		}
 		else
 		{
@@ -83,10 +81,9 @@ namespace ISXHttpClient
 			const char *respCh = respS.c_str();
 			//tlf_i << AT << respCh;
 			
-			
 			// output on a consol
 			std::wostringstream ss;
-			ss << L"Server returned returned status code " << response.status_code() << L'.' << std::endl;			
+			ss << L"Server returnedstatus code " << response.status_code() << L'.' << std::endl;			
 			std::wcout << ss.str();
 		
 			// retrieve a response
@@ -128,6 +125,113 @@ namespace ISXHttpClient
 
 			});
 		});	
+	}
+
+
+	pplx::task<void> HttpClient::request_files_upload(utility::string_t filepath)
+	{
+
+		char* buffer = nullptr;
+
+		//const char file_path[] = filepath;
+		const char file_path[] = "info_file.log";
+
+		std::ifstream is(file_path);
+
+		if (!is.is_open())
+		{
+			std::wcout << "Can't open file" << std::endl;
+			system("pause");
+			is.close();
+			//tlf_e << AT << "Can't open file Log file";
+			return create_task([]
+			{
+				throw std::invalid_argument("Can't open Log file");
+			});
+		}
+
+		long p = (long)is.tellg();
+		is.seekg(0, std::ios::end);
+		size_t size = (size_t)is.tellg();
+		is.seekg(p);
+
+		buffer = new char[size];
+
+		is.read(buffer, size);
+		is.close();
+		
+
+		std::string encoded_str = base64_encode(reinterpret_cast<const unsigned char*>(buffer), size);
+		std::wstring wstr_encoded(encoded_str.begin(), encoded_str.end());
+
+		if (!domen.empty())
+		{
+			http_client new_client(domen);
+			client = std::move(new_client);
+		}
+
+		std::wstring body = L"/webservice/rest/server.php?&wstoken=";
+
+		body.append(token);
+		body.append(L"&wsfunction=core_files_upload&contextid=0&component=user&filearea=draft&itemid=0&filepath=/&filename=");
+
+		body.append(L"info_file.log");
+		body.append(L"&filecontent=");
+
+		body.append(wstr_encoded);
+		body.append(L"&contextlevel=user&instanceid=7");
+
+		return client.request(methods::POST, body).then([](http_response response)
+		{
+			int responsecode = response.status_code();
+			std::string respS = "Server returned status code " + std::to_string(responsecode);
+			const char *respCh = respS.c_str();
+			//tlf_i << AT << respCh;
+
+			// output on a consol
+			std::wostringstream ss;
+			ss << L"Server returned status code " << response.status_code() << L'.' << std::endl;
+			std::wcout << ss.str();
+
+			// retrieve a response
+			size_t lenght = (size_t)response.headers().content_length();
+			istream bodyStream = response.body();
+
+			container_buffer<std::string> inStringBuffer;
+
+			return bodyStream.read(inStringBuffer, lenght).then([inStringBuffer](size_t bytesRead)
+			{
+				std::string &text = inStringBuffer.collection();
+				std::wstring wstr(text.begin(), text.end());
+
+				std::wcout << wstr << std::endl;
+
+
+				std::size_t start_pos = text.find("<RESPONSE>");
+				if (start_pos == std::string::npos)
+				{
+					start_pos = text.find("<MESSAGE>");
+					if (start_pos != std::string::npos)
+					{
+						std::size_t found_pos = text.find("</MESSAGE>", start_pos + 9);
+						const std::size_t length = found_pos - start_pos - 9;
+						const std::string subexpr = text.substr(start_pos + 9, length) + ". Log file do not passed";
+						const char *ch = subexpr.c_str();
+						//tlf_e << AT << ch;
+					}
+					else
+					{
+						//tlf_e << AT << "Unknown bad response from server. Log file do not passed";
+					}
+				}
+				else
+				{
+					//tlf_i << AT << "Log file passed succesfully";
+				}
+
+
+			});
+		});
 	}
 
 	bool HttpClient::openConfigFile(std::string fileName)

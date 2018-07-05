@@ -40,4 +40,25 @@
 		client.openConfigFile(fileConfig);
 	}
 
-	
+	void RestClient::request(std::string  filepath)
+	{
+		utility::string_t temp(filepath.begin(), filepath.end());
+
+		pplx::task<void> requestTask = client.request_files_upload(temp);
+
+		try
+		{
+			requestTask.wait();
+		}
+
+		catch (const std::invalid_argument &e)
+		{
+			std::wcout << e.what() << std::endl;
+		}
+
+		catch (const std::exception &e)
+		{
+			std::wcout << "Error exception: " << e.what() << std::endl;
+			//tlf_e << AT << "WinHttpSendRequest: 12029 (No internet connection)";
+		}
+	}
