@@ -8,15 +8,15 @@
 	RestClient::RestClient(Subject* obj) : Observer(obj)
 	{}
 
-	void RestClient::request()
+	void RestClient::Request(void)
 	{
-		char* data = Observer::getSubject()->getBufferData();
-		size_t size_buf = Observer::getSubject()->getSize();
-		std::wstring file_name(Observer::getSubject()->getFileName());
+		char* data = Observer::GetSubject()->GetBufferData();
+		size_t size_buf = Observer::GetSubject()->GetSize();
+		std::wstring file_name(Observer::GetSubject()->GetFileName());
 
 		std::wcout << size_buf << std::endl;
 
-		pplx::task<void> requestTask = client.request_files_upload(data, size_buf, file_name);
+		pplx::task<void> requestTask = client.RequestFilesUpload(data, size_buf, file_name);
 
 		try
 		{
@@ -37,14 +37,14 @@
 
 	void RestClient::SetConfigFile(std::string fileConfig)
 	{
-		client.openConfigFile(fileConfig);
+		client.OpenConfigFile(fileConfig);
 	}
 
-	void RestClient::request(std::string  filepath)
+	void RestClient::Request(std::string  filepath)
 	{
 		utility::string_t temp(filepath.begin(), filepath.end());
 
-		pplx::task<void> requestTask = client.request_files_upload(temp);
+		pplx::task<void> requestTask = client.RequestFilesUpload(temp);
 
 		try
 		{

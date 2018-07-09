@@ -38,7 +38,7 @@ namespace ISXHttpClient
 		return *this;
 	}	
 
-	pplx::task<void> HttpClient::request_files_upload(char* buffer, size_t lenght, utility::string_t filename)
+	pplx::task<void> HttpClient::RequestFilesUpload(char* buffer, size_t lenght, utility::string_t filename)
 	{	
 
 		if (buffer == nullptr)
@@ -128,7 +128,7 @@ namespace ISXHttpClient
 	}
 
 
-	pplx::task<void> HttpClient::request_files_upload(utility::string_t filepath)
+	pplx::task<void> HttpClient::RequestFilesUpload(utility::string_t filepath)
 	{
 
 		char* buffer = nullptr;
@@ -234,7 +234,7 @@ namespace ISXHttpClient
 		});
 	}
 
-	bool HttpClient::openConfigFile(std::string fileName)
+	bool HttpClient::OpenConfigFile(std::string fileName)
 	{
 		std::ifstream in_file(fileName);
 

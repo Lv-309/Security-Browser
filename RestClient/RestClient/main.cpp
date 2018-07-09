@@ -40,7 +40,7 @@ int wmain()
 	RestClient client(&subj);	
 
 	client.SetConfigFile("config.txt");
-	subj.setBufferData(buffer, size, L"image2.jpg");
+	subj.SetBufferData(buffer, size, L"image2.jpg");
 
 	std::wcout << "Enter any key to continue..." << std::endl;
 	std::cin.get();

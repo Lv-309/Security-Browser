@@ -23,10 +23,10 @@ namespace ISXHttpClient
 
 		HttpClient& operator=(HttpClient&&);
 		
-		pplx::task<void> request_files_upload(char* buffer, size_t lenght, utility::string_t filename);	  // for upload image
-		pplx::task<void> request_files_upload(utility::string_t filename);      // for upload Log file
+		pplx::task<void> RequestFilesUpload(char* buffer, size_t lenght, utility::string_t filename);	  // for upload image
+		pplx::task<void> RequestFilesUpload(utility::string_t filename);      // for upload Log file
 
-		bool openConfigFile(std::string);
+		bool OpenConfigFile(std::string);
 
 	private:
 		uri base_url;

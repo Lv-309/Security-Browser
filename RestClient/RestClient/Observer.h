@@ -10,11 +10,11 @@ public:
 
 	Observer(Subject* elem);	
 
-	virtual void request() = 0;	
-	virtual void request(std::string) = 0;
+	virtual void Request(void) = 0;	
+	virtual void Request(std::string) = 0;
 
 protected:
 
-	Subject* getSubject();
+	Subject* GetSubject();
 	
 };

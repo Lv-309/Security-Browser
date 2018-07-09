@@ -5,10 +5,10 @@
 	{
 		element = elem;
 
-		element->attach(this);
+		element->Attach(this);
 	}
 
-	Subject* Observer::getSubject()
+	Subject* Observer::GetSubject()
 	{
 		return element;
 	}
