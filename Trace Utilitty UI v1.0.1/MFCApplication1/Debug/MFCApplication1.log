@@ -1,0 +1,3 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (MFCApplication1.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  TraceUtilityUI.cpp
+  MFCApplication1.vcxproj -> D:\Programming\C++\courses\Trace Utility\UI\Trace Utility UI v1.0.1\Trace Utility UI v1.1\Debug\TraceUtilityUI.exe
