@@ -28,6 +28,8 @@ char* ISXFile::File::GetCurTime()
 
 void ISXFile::File::EncodeWrite(std::string str)
 {
+	std::lock_guard<std::recursive_mutex> lock(mutex);
+
 	std::string encoded_str = base64_encode((const unsigned char*)str.c_str(), strlen(str.c_str()));
 	this->m_ofile.write(encoded_str.c_str(), encoded_str.length());
 	this->m_ofile.write("\n", strlen("\n"));
