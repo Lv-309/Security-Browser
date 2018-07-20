@@ -29,6 +29,11 @@ namespace ISXFaceDetector
 		{
 			tlf_e << AT << "Can't load haarcascade_frontalface_alt.xml for face detecting.";
 		}
+
+		// create directories for photos
+		std::experimental::filesystem::create_directory("..\\Photos\\No face");
+		std::experimental::filesystem::create_directory("..\\Photos\\One face");
+		std::experimental::filesystem::create_directory("..\\Photos\\Many faces");
 	}
 
 	void FaceDetector::FindAnyCamera()
