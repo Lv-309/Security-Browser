@@ -1,0 +1,9 @@
+﻿  stdafx.cpp
+  base64.cpp
+  File.cpp
+  MFCApplication1.cpp
+  MFCApplication1Dlg.cpp
+  Generating code
+  All 543 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  MFCApplication1.vcxproj -> D:\Programming\C++\courses\Secure Browser\Secure Browser v0.9.5.1 (bad-version without escapi)\SecureBrowser\Trace Utility UI\Release\MFCApplication1.exe

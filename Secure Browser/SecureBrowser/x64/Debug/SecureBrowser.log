@@ -1,0 +1,31 @@
+﻿  Base64.cpp
+  HttpClient.cpp
+  Observer.cpp
+  RestClient.cpp
+  Subject.cpp
+  base64l.cpp
+  File.cpp
+  Log.cpp
+  LogDebug.cpp
+  LogError.cpp
+  LogFatal.cpp
+  LogInfo.cpp
+  LogTrace.cpp
+  LogWarning.cpp
+  ChooseCameraWindow.cpp
+  HandleMonitors.cpp
+  HandleSession.cpp
+  AuthenticationWindow.cpp
+  KeySequence.cpp
+  MyWebBrowser.cpp
+  Generating Code...
+d:\programming\c++\courses\secure browser\secure browser v0.9.5 (2) - setup bad-version witout escapi)\securebrowser\webbrowsermain\mywebbrowser.cpp(314): warning C4715: 'ISXMyWebBrowser::MyWebBrowser::WndProc': not all control paths return a value
+  Compiling...
+  MyWindow.cpp
+  stdafx.cpp
+  VerifyLink.cpp
+  WebBrowserWindow.cpp
+  WinMain.cpp
+  FaceDetector.cpp
+  Generating Code...
+  SecureBrowser.vcxproj -> D:\Programming\C++\courses\Secure Browser\Secure Browser v0.9.5 (2) - setup bad-version witout escapi)\x64\Debug\SecureBrowser.exe

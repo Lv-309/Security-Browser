@@ -1,0 +1,34 @@
+﻿  Base64.cpp
+  HttpClient.cpp
+  Observer.cpp
+  RestClient.cpp
+  Subject.cpp
+  base64l.cpp
+  File.cpp
+d:\programming\c++\courses\secure browser\secure browser v0.9.5 (2.2)\securebrowser\traceutility\file.cpp(26): warning C4996: 'asctime': This function or variable may be unsafe. Consider using asctime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.16299.0\ucrt\time.h(116): note: see declaration of 'asctime'
+  Log.cpp
+  LogDebug.cpp
+  LogError.cpp
+  LogFatal.cpp
+  LogInfo.cpp
+  LogTrace.cpp
+  LogWarning.cpp
+  ChooseCameraWindow.cpp
+  HandleMonitors.cpp
+  HandleSession.cpp
+  AuthenticationWindow.cpp
+  KeySequence.cpp
+  MyWebBrowser.cpp
+  Compiling...
+  MyWindow.cpp
+  stdafx.cpp
+  VerifyLink.cpp
+  WebBrowserWindow.cpp
+  WinMain.cpp
+  FaceDetector.cpp
+  Generating code
+d:\programming\c++\courses\secure browser\secure browser v0.9.5 (2.2)\securebrowser\webbrowsermain\mywebbrowser.cpp(306): warning C4715: 'ISXMyWebBrowser::MyWebBrowser::WndProc': not all control paths return a value
+  All 5854 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  SecureBrowser.vcxproj -> D:\Programming\C++\courses\Secure Browser\Secure Browser v0.9.5 (2.2)\x64\Release\SecureBrowser.exe
